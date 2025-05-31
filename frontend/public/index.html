@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mileage - Maksimalkan Kartu dengan AI Cerdas</title>
+    
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <!-- Custom Styles -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0D0D17;
+            color: #A1A5B7;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            background: rgba(13, 13, 23, 0.9);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        
+        .logo {
+            color: #3F4CFF;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3F4CFF, #6C5CE7);
+            color: white;
+        }
+        
+        .btn-outline {
+            border: 1px solid #3F4CFF;
+            color: #3F4CFF;
+            background: transparent;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(63, 76, 255, 0.3);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 120px 0 80px;
+            background: radial-gradient(ellipse at center, rgba(63, 76, 255, 0.1) 0%, transparent 70%);
+        }
+        
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        .hero-text h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, #3F4CFF, #6C5CE7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero-text p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #A1A5B7;
+        }
+        
+        .phone-mockup {
+            position: relative;
+            max-width: 350px;
+            margin: 0 auto;
+        }
+        
+        .phone-frame {
+            background: linear-gradient(145deg, #1a1a2e, #16213e);
+            border-radius: 30px;
+            padding: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+        
+        .phone-screen {
+            background: #000;
+            border-radius: 20px;
+            padding: 20px;
+            color: white;
+        }
+        
+        .phone-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .phone-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .stat-card {
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .stat-card.primary { background: #3F4CFF; }
+        .stat-card.warning { background: #FFC700; color: #000; }
+        .stat-card.success { background: #50CD89; }
+        .stat-card.info { background: #009EF7; }
+        
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1rem;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background: rgba(26, 26, 46, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: #3F4CFF;
+            box-shadow: 0 20px 40px rgba(63, 76, 255, 0.2);
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #3F4CFF, #6C5CE7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: white;
+        }
+        
+        .feature-card h3 {
+            color: white;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        .feature-card p {
+            color: #A1A5B7;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-link {
+            color: #3F4CFF;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        /* Credit Cards Section */
+        .credit-cards {
+            padding: 80px 0;
+            background: rgba(26, 26, 46, 0.3);
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        
+        .credit-card {
+            background: rgba(26, 26, 46, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .credit-card:hover {
+            transform: translateY(-5px);
+            border-color: #3F4CFF;
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .card-icon {
+            font-size: 2rem;
+            margin-right: 1rem;
+            color: #3F4CFF;
+        }
+        
+        .card-title {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .card-type {
+            font-size: 0.8rem;
+            color: #A1A5B7;
+            text-transform: uppercase;
+        }
+        
+        .card-features {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-features li {
+            margin-bottom: 0.5rem;
+            color: #A1A5B7;
+            font-size: 0.9rem;
+        }
+        
+        /* Pricing Section */
+        .pricing {
+            padding: 80px 0;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        
+        .pricing-card {
+            background: rgba(26, 26, 46, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .pricing-card.featured {
+            border-color: #3F4CFF;
+            background: rgba(63, 76, 255, 0.1);
+        }
+        
+        .pricing-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #3F4CFF;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .pricing-card h3 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+        
+        .price-period {
+            color: #A1A5B7;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+        
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            color: #A1A5B7;
+        }
+        
+        .pricing-features i {
+            color: #50CD89;
+            margin-right: 0.75rem;
+            font-size: 1.2rem;
+        }
+        
+        /* Blog Section */
+        .blog {
+            padding: 80px 0;
+            background: rgba(26, 26, 46, 0.3);
+        }
+        
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .blog-card {
+            background: rgba(26, 26, 46, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-5px);
+            border-color: #3F4CFF;
+        }
+        
+        .blog-image {
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .blog-content {
+            padding: 1.5rem;
+        }
+        
+        .blog-title {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .blog-excerpt {
+            color: #A1A5B7;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 60px 0 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(13, 13, 23, 0.9);
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section h5 {
+            color: white;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-section a {
+            color: #A1A5B7;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-section a:hover {
+            color: #3F4CFF;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #A1A5B7;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            background: #3F4CFF;
+            color: white;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #A1A5B7;
+        }
+        
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 2rem;
+            }
+            
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+            
+            .features-grid,
+            .cards-grid,
+            .pricing-grid,
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 0 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-text h1 {
+                font-size: 2rem;
+            }
+            
+            .section-header h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">Mileage</a>
+                <a href="#" class="btn btn-outline">Masuk Dashboard</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content fade-in">
+                <div class="hero-text">
+                    <h1>Maksimalkan Kartu <span class="text-gradient">dengan AI Cerdas</span></h1>
+                    <p>Platform AI yang mengoptimalkan penggunaan kartu kredit untuk maksimalkan reward, mengatur anggaran dan transaksi dengan smart automation yang sesuai gaya hidup Anda.</p>
+                    <a href="#" class="btn btn-primary">Mulai Sekarang</a>
+                </div>
+                
+                <div class="phone-mockup">
+                    <div class="phone-frame">
+                        <div class="phone-screen">
+                            <div class="phone-header">
+                                <div>
+                                    <div style="color: white; font-weight: 600;">Dashboard</div>
+                                    <div style="font-size: 0.8rem; color: #A1A5B7;">Real-time spending analysis</div>
+                                </div>
+                                <i class="bi bi-three-dots" style="color: white; font-size: 1.2rem;"></i>
+                            </div>
+                            
+                            <div class="phone-stats">
+                                <div class="stat-card primary">
+                                    <div class="stat-value">247K</div>
+                                    <div class="stat-label">Total Miles</div>
+                                </div>
+                                <div class="stat-card warning">
+                                    <div class="stat-value">15K</div>
+                                    <div class="stat-label">Spend</div>
+                                </div>
+                                <div class="stat-card success">
+                                    <div class="stat-value">4/7</div>
+                                    <div class="stat-label">Week</div>
+                                </div>
+                                <div class="stat-card info">
+                                    <div class="stat-value">47M</div>
+                                    <div class="stat-label">Total</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2>Mengapa Mileage App Pilihan Tepat?</h2>
+                <p>Master kartu kredit AI mengoptimalkan spending untuk maksimalkan keuntungan dari reward dan spending otomatis sesuai target yang Anda.</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="bi bi-graph-up"></i>
+                    </div>
+                    <h3>Pintar Terbukti & Statistical</h3>
+                    <p>Master kartu kredit dengan mengoptimalkan penggunaan berdasarkan data statistik reward yang optimal.</p>
+                    <a href="#" class="feature-link">Lihat Detail</a>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="bi bi-person-circle"></i>
+                    </div>
+                    <h3>Pantau Anggaran & Transaksi</h3>
+                    <p>Monitor spending dan transaksi realtime dengan smart notification untuk kontrol optimal terhadap pengeluaran.</p>
+                    <a href="#" class="feature-link">Lihat Detail</a>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="bi bi-trophy"></i>
+                    </div>
+                    <h3>Pengalaman Tujuan Otomatis</h3>
+                    <p>Dapatkan reward maksimal dengan strategi spending automation untuk mencapai target goals perjalanan Anda.</p>
+                    <a href="#" class="feature-link">Lihat Detail</a>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="bi bi-credit-card"></i>
+                    </div>
+                    <h3>Bandingkan Kartu Cerdas</h3>
+                    <p>Smart comparison untuk menemukan kartu kredit terbaik dan cocok dengan gaya hidup spending pattern.</p>
+                    <a href="#" class="feature-link">Lihat Detail</a>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="bi bi-newspaper"></i>
+                    </div>
+                    <h3>Berita & Info Finansial</h3>
+                    <p>Update promo kartu kredit, tips finansial dan berita ekonomi yang relevan dengan kebutuhan Anda.</p>
+                    <a href="#" class="feature-link">Lihat Detail</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Credit Cards Section -->
+    <section class="credit-cards">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2>Ajukan Kartu Kredit Pilihan</h2>
+                <p>Temukan kartu kredit yang paling menguntungkan untuk kebutuhan Anda</p>
+            </div>
+            
+            <div class="cards-grid">
+                <div class="credit-card fade-in">
+                    <div class="card-header">
+                        <i class="bi bi-credit-card-2-front card-icon"></i>
+                        <div>
+                            <div class="card-title">Kartu Platinum Miles</div>
+                            <div class="card-type">BASIC</div>
+                        </div>
+                    </div>
+                    <ul class="card-features">
+                        <li>• Annual fee waiver</li>
+                        <li>• 2X miles untuk belanja</li>
+                        <li>• Airport lounge access</li>
+                        <li>• Travel insurance</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary" style="width: 100%;">Cek Rate & Apply</a>
+                </div>
+                
+                <div class="credit-card fade-in">
+                    <div class="card-header">
+                        <i class="bi bi-credit-card-2-front card-icon" style="color: #FFC700;"></i>
+                        <div>
+                            <div class="card-title">Kartu Cashback Harian</div>
+                            <div class="card-type">BASIC</div>
+                        </div>
+                    </div>
+                    <ul class="card-features">
+                        <li>• 5% cashback dining</li>
+                        <li>• 3% cashback groceries</li>
+                        <li>• 1% all purchases</li>
+                        <li>• No annual fee</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary" style="width: 100%;">Cek Rate & Apply</a>
+                </div>
+                
+                <div class="credit-card fade-in">
+                    <div class="card-header">
+                        <i class="bi bi-credit-card-2-front card-icon" style="color: #50CD89;"></i>
+                        <div>
+                            <div class="card-title">Kartu Circle Plus</div>
+                            <div class="card-type">BASIC</div>
+                        </div>
+                    </div>
+                    <ul class="card-features">
+                        <li>• Unlimited 1.5% cashback</li>
+                        <li>• Welcome bonus</li>
+                        <li>• Purchase protection</li>
+                        <li>• 0% intro APR</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary" style="width: 100%;">Cek Rate & Apply</a>
+                </div>
+                
+                <div class="credit-card fade-in">
+                    <div class="card-header">
+                        <i class="bi bi-credit-card-2-front card-icon" style="color: #009EF7;"></i>
+                        <div>
+                            <div class="card-title">Kartu Travel Premium</div>
+                            <div class="card-type">PREMIUM</div>
+                        </div>
+                    </div>
+                    <ul class="card-features">
+                        <li>• 3X points on travel</li>
+                        <li>• Priority boarding</li>
+                        <li>• Hotel upgrades</li>
+                        <li>• Concierge service</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary" style="width: 100%;">Cek Rate & Apply</a>
+                </div>
+                
+                <div class="credit-card fade-in">
+                    <div class="card-header">
+                        <i class="bi bi-credit-card-2-front card-icon" style="color: #F1416C;"></i>
+                        <div>
+                            <div class="card-title">Kartu Signature Rewards</div>
+                            <div class="card-type">PREMIUM</div>
+                        </div>
+                    </div>
+                    <ul class="card-features">
+                        <li>• 100k welcome bonus</li>
+                        <li>• 5X dining & entertainment</li>
+                        <li>• Global entry credit</li>
+                        <li>• Premium benefits</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary" style="width: 100%;">Cek Rate & Apply</a>
+                </div>
+                
+                <div class="credit-card fade-in">
+                    <div class="card-header">
+                        <i class="bi bi-credit-card-2-front card-icon" style="color: #7239EA;"></i>
+                        <div>
+                            <div class="card-title">Kartu Everyday Smart</div>
+                            <div class="card-type">PREMIUM</div>
+                        </div>
+                    </div>
+                    <ul class="card-features">
+                        <li>• 6% cashback groceries</li>
+                        <li>• 3% gas stations</li>
+                        <li>• 1% everything else</li>
+                        <li>• No annual fee</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary" style="width: 100%;">Cek Rate & Apply</a>
+                </div>
+                
+                <div class="credit-card fade-in">
+                    <div class="card-header">
+                        <i class="bi bi-credit-card-2-front card-icon" style="color: #FF8A65;"></i>
+                        <div>
+                            <div class="card-title">Kartu Business Elite</div>
+                            <div class="card-type">PREMIUM</div>
+                        </div>
+                    </div>
+                    <ul class="card-features">
+                        <li>• 5X business purchases</li>
+                        <li>• Expense management</li>
+                        <li>• Employee cards</li>
+                        <li>• Business rewards</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary" style="width: 100%;">Cek Rate & Apply</a>
+                </div>
+                
+                <div class="credit-card fade-in">
+                    <div class="card-header">
+                        <i class="bi bi-credit-card-2-front card-icon" style="color: #26C6DA;"></i>
+                        <div>
+                            <div class="card-title">Kartu Syariah Berkah</div>
+                            <div class="card-type">PREMIUM</div>
+                        </div>
+                    </div>
+                    <ul class="card-features">
+                        <li>• Shariah compliant</li>
+                        <li>• Rewards program</li>
+                        <li>• Special merchant</li>
+                        <li>• Islamic banking</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary" style="width: 100%;">Cek Rate & Apply</a>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem;">
+                <a href="#" style="color: #3F4CFF; text-decoration: none; font-weight: 500;">Lihat Semua Produk →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2>Paket Berlangganan Fleksibel</h2>
+                <p>Pilih paket yang paling sesuai dengan kebutuhan finansial dan gaya hidup Anda untuk mendapatkan benefit maksimal.</p>
+            </div>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card fade-in">
+                    <h3>Basic</h3>
+                    <div class="price">Gratis</div>
+                    <div class="price-period">Untuk pemula yang ingin memulai</div>
+                    <ul class="pricing-features">
+                        <li><i class="bi bi-check-circle-fill"></i> 1 Kartu kredit tracking</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Basic spending insights</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Monthly reports</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Email support</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Reward tracking</li>
+                    </ul>
+                    <a href="#" class="btn btn-outline" style="width: 100%;">Mulai Gratis</a>
+                </div>
+                
+                <div class="pricing-card featured fade-in">
+                    <div class="pricing-badge">Paling Populer</div>
+                    <h3>Pro</h3>
+                    <div class="price text-gradient">Rp 49rb</div>
+                    <div class="price-period">/bulan</div>
+                    <ul class="pricing-features">
+                        <li><i class="bi bi-check-circle-fill"></i> 5 Kartu kredit tracking</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Advanced AI insights</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Real-time notifications</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Goal tracking & targets</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Priority support</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary" style="width: 100%;">Coba Sekarang</a>
+                </div>
+                
+                <div class="pricing-card fade-in">
+                    <h3>Business</h3>
+                    <div class="price">Rp 99rb</div>
+                    <div class="price-period">/bulan</div>
+                    <ul class="pricing-features">
+                        <li><i class="bi bi-check-circle-fill"></i> Unlimited cards</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Team collaboration</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Advanced reporting</li>
+                        <li><i class="bi bi-check-circle-fill"></i> API integration</li>
+                        <li><i class="bi bi-check-circle-fill"></i> 24/7 phone support</li>
+                    </ul>
+                    <a href="#" class="btn btn-outline" style="width: 100%;">Mulai Trial</a>
+                </div>
+                
+                <div class="pricing-card fade-in">
+                    <h3>Kustom</h3>
+                    <div class="price">Custom</div>
+                    <div class="price-period">Solusi sesuai kebutuhan spesifik</div>
+                    <ul class="pricing-features">
+                        <li><i class="bi bi-check-circle-fill"></i> Custom features</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Dedicated support</li>
+                        <li><i class="bi bi-check-circle-fill"></i> On-premise deployment</li>
+                        <li><i class="bi bi-check-circle-fill"></i> White-label solution</li>
+                        <li><i class="bi bi-check-circle-fill"></i> SLA guarantee</li>
+                    </ul>
+                    <a href="#" class="btn btn-outline" style="width: 100%;">Hubungi Kami</a>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem; color: #A1A5B7;">
+                Semua paket dilengkapi dengan 30 hari money-back guarantee
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section class="blog">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2>Artikel Terbaru dari Blog Mileage</h2>
+                <p>Tips, trik, dan informasi terbaru seputar keuangan dari tim ahli kami</p>
+            </div>
+            
+            <div class="blog-grid">
+                <div class="blog-card fade-in">
+                    <div class="blog-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                    <div class="blog-content">
+                        <h3 class="blog-title">5 Cara Cerdas Menggunakan Kartu Kredit</h3>
+                        <p class="blog-excerpt">Pelajari strategi terbaik untuk memaksimalkan benefit kartu kredit Anda tanpa terjebak hutang yang merugikan.</p>
+                        <a href="#" class="btn btn-primary">Baca Selengkapnya</a>
+                    </div>
+                </div>
+                
+                <div class="blog-card fade-in">
+                    <div class="blog-image" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);"></div>
+                    <div class="blog-content">
+                        <h3 class="blog-title">Mengelola Reward Point Secara Optimal</h3>
+                        <p class="blog-excerpt">Tips dan trik mengelola reward point dari berbagai kartu kredit untuk mendapatkan nilai maksimal dari setiap transaksi.</p>
+                        <a href="#" class="btn btn-primary">Baca Selengkapnya</a>
+                    </div>
+                </div>
+                
+                <div class="blog-card fade-in">
+                    <div class="blog-image" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);"></div>
+                    <div class="blog-content">
+                        <h3 class="blog-title">Perbandingan Kartu Kredit Terbaik untuk Traveling di 2024</h3>
+                        <p class="blog-excerpt">Review lengkap kartu kredit dengan benefit travel terbaik dan strategi untuk mengumpulkan miles dengan efisien.</p>
+                        <a href="#" class="btn btn-primary">Baca Selengkapnya</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem;">
+                <a href="#" class="btn btn-outline">Lihat Semua Artikel</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h5>Mileage App</h5>
+                    <p style="color: #A1A5B7;">Maksimalkan kartu kredit dengan AI cerdas untuk optimalisasi spending dan reward.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h5>Link Cepat</h5>
+                    <ul>
+                        <li><a href="#">Beranda</a></li>
+                        <li><a href="#">Features</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h5>Legal</h5>
+                    <ul>
+                        <li><a href="#">Kebijakan Privasi</a></li>
+                        <li><a href="#">Syarat Layanan</a></li>
+                        <li><a href="#">Keamanan Program</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h5>Hubungi Kami</h5>
+                    <p style="color: #A1A5B7;">support@mileageapp.id</p>
+                    <div class="social-links">
+                        <a href="#"><i class="bi bi-facebook"></i></a>
+                        <a href="#"><i class="bi bi-twitter"></i></a>
+                        <a href="#"><i class="bi bi-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Mileage App. Semua hak dilindungi undang-undang.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Smooth scroll animation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Fade in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all fade-in elements
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Card hover effects
+        document.querySelectorAll('.feature-card, .credit-card, .pricing-card, .blog-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.background = 'rgba(13, 13, 23, 0.95)';
+            } else {
+                header.style.background = 'rgba(13, 13, 23, 0.9)';
+            }
+        });
+
+        // Button click effects
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Create ripple effect
+                const ripple = document.createElement('div');
+                ripple.style.position = 'absolute';
+                ripple.style.borderRadius = '50%';
+                ripple.style.background = 'rgba(255, 255, 255, 0.3)';
+                ripple.style.transform = 'scale(0)';
+                ripple.style.animation = 'ripple 0.6s linear';
+                ripple.style.left = (e.pageX - this.offsetLeft - 25) + 'px';
+                ripple.style.top = (e.pageY - this.offsetTop - 25) + 'px';
+                ripple.style.width = ripple.style.height = '50px';
+                
+                this.style.position = 'relative';
+                this.style.overflow = 'hidden';
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Add ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html> 
