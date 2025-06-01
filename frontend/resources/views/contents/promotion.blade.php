@@ -1076,7 +1076,7 @@ document.addEventListener('DOMContentLoaded', function () {
         };
     }
     function updateFiltersFromInputs() {
-        currentFilters.search = searchInput.value.toLowerCase();
+            currentFilters.search = searchInput.value.toLowerCase();
         currentFilters.categories = Array.from(document.querySelectorAll('input[id^="cat-"]:checked')).map(cb => cb.value);
         currentFilters.cardTypes = Array.from(document.querySelectorAll('input[id^="card-"]:checked')).map(cb => cb.value);
         currentFilters.benefits = Array.from(document.querySelectorAll('input[id^="benefit-"]:checked')).map(cb => cb.value);
@@ -1101,8 +1101,8 @@ document.addEventListener('DOMContentLoaded', function () {
             discountMin: 0
         };
         currentSort = 'newest';
-        currentPage = 1;
-        applyFiltersAndSort();
+            currentPage = 1;
+            applyFiltersAndSort();
     }
     function applyFiltersAndSort() {
         showLoading();
@@ -1201,7 +1201,7 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
             if (currentPage > 1) {
                 currentPage--;
-                applyFiltersAndSort();
+            applyFiltersAndSort();
             }
         });
         prevLi.appendChild(prevA);

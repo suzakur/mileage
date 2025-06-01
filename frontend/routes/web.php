@@ -64,3 +64,7 @@ Route::get('/promo/{id}', function($id) {
 Route::get('/blog/{id}', function($id) {
     return view('contents.blog-detail');
 });
+
+Route::get('/card/{id}', function($id) {
+    return view('contents.card-detail');
+});

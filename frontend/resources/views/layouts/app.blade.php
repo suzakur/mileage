@@ -634,6 +634,10 @@
                 border-radius: 8px;
             }
         }
+
+        .user-dropdown:hover .dropdown-menu, .user-dropdown:focus-within .dropdown-menu {
+            display: block !important;
+        }
     </style>
 </head>
 

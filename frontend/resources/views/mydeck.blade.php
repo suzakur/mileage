@@ -515,6 +515,10 @@
         <a href="#" class="filter-btn" data-filter="travel">Travel & Miles</a>
         <a href="#" class="filter-btn" data-filter="premium">Premium</a>
     </div>
+    {{-- Keyword Search --}}
+    <div class="mb-4 d-flex justify-content-center">
+        <input type="text" id="cardKeywordSearch" class="form-control w-50" placeholder="Cari kartu atau bank...">
+    </div>
 
     {{-- Credit Cards Data --}}
     @php
@@ -678,6 +682,9 @@
                             <span>Credit Limit:</span>
                             <span class="detail-value">Rp {{ number_format($card->credit_limit) }}</span>
                         </div>
+                    </div>
+                    <div class="mt-3 text-end">
+                        <a href="/card/{{ $card->id }}" class="btn btn-sm btn-outline-primary">Lihat Kartu</a>
                     </div>
                 </div>
                 @endforeach
@@ -1135,6 +1142,24 @@ document.addEventListener('DOMContentLoaded', function() {
             exitPresetMode();
         }
     });
+
+    // Keyword search functionality
+    const keywordInput = document.getElementById('cardKeywordSearch');
+    if (keywordInput) {
+        keywordInput.addEventListener('input', function() {
+            const keyword = this.value.toLowerCase();
+            document.querySelectorAll('.card-item').forEach(card => {
+                const cardName = card.querySelector('.card-info h3').textContent.toLowerCase();
+                const bankName = card.querySelector('.card-info p').textContent.toLowerCase();
+                card.style.display = (cardName.includes(keyword) || bankName.includes(keyword)) ? '' : 'none';
+            });
+            // Hide bank section if no visible cards
+            document.querySelectorAll('.bank-section').forEach(section => {
+                const visibleCards = section.querySelectorAll('.card-item:not([style*="display: none"])');
+                section.style.display = visibleCards.length > 0 ? '' : 'none';
+            });
+        });
+    }
 });
 </script>
 @endsection 
