@@ -3,6 +3,7 @@
 @section('title', 'Promosi - Mileage')
 
 @section('styles')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
     .section-header {
         /* Styles for the section header itself (e.g., text alignment, margins) */
@@ -237,6 +238,204 @@
         color: var(--text-secondary);
         opacity: 0.6;
     }
+
+    /* Sticky Sidebar */
+    .filter-sidebar-wrapper {
+        position: -webkit-sticky; /* Safari */
+        position: sticky;
+        top: 100px; /* Adjust based on your navbar height + desired offset */
+        height: calc(100vh - 120px); /* Example height, adjust as needed */
+        overflow-y: auto;
+    }
+
+    .filter-card {
+        background-color: var(--card-color);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 15px var(--shadow);
+    }
+    .filter-header {
+        padding-bottom: 1rem;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+    .filter-header h5 {
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+    .filter-header h5 i {
+        margin-right: 0.5rem;
+        color: var(--primary-color);
+    }
+    .filter-section {
+        margin-bottom: 1.75rem;
+    }
+    .filter-section .form-label {
+        font-weight: 500;
+        color: var(--text-primary);
+        margin-bottom: 0.75rem;
+        font-size: 0.95rem;
+    }
+    .filter-checkboxes .form-check,
+    .filter-radiobuttons .form-check {
+        margin-bottom: 0.6rem;
+    }
+    .filter-checkboxes .form-check-label,
+    .filter-radiobuttons .form-check-label {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+    }
+
+    /* Range Slider Styles */
+    .range-slider-group {
+        margin-bottom: 1rem;
+    }
+    .range-slider-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+    }
+    .range-slider-group input[type="range"] {
+        width: 100%;
+        margin-bottom: 0.25rem;
+    }
+    .range-value {
+        font-weight: 500;
+        color: var(--primary-color);
+    }
+
+    /* Select2 Styles for dark mode */
+    .select2-container--bootstrap-5 .select2-selection {
+        background-color: var(--surface-color);
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+        border-radius: 0.375rem; /* Bootstrap default */
+    }
+    .select2-container--bootstrap-5 .select2-selection--single .select2-selection__rendered {
+        color: var(--text-primary);
+    }
+    .select2-container--bootstrap-5 .select2-dropdown {
+        background-color: var(--card-color);
+        border: 1px solid var(--border-color);
+    }
+    .select2-container--bootstrap-5 .select2-results__option {
+        color: var(--text-secondary);
+    }
+    .select2-container--bootstrap-5 .select2-results__option--highlighted {
+        background-color: var(--primary-color) !important;
+        color: white !important;
+    }
+    .select2-container--bootstrap-5 .select2-search--dropdown .select2-search__field {
+        background-color: var(--surface-color);
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+    }
+
+    /* Promo Card Styling (Copied from home.blade.php and adapted) */
+    .promo-card {
+        background: var(--card-color);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        margin-bottom: 1.75rem; /* Added margin for spacing */
+        display: flex; /* Added for consistent height if content varies */
+        flex-direction: column; /* Added */
+    }
+    .promo-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--primary-color);
+        box-shadow: 0 15px 35px var(--shadow);
+    }
+    .promo-image {
+        height: 200px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 3rem;
+    }
+    .promo-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .promo-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: rgba(255, 255, 255, 0.9);
+        color: var(--primary-color);
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+    .promo-content {
+        padding: 1.5rem;
+        flex-grow: 1; /* Added for consistent height */
+        display: flex; /* Added */
+        flex-direction: column; /* Added */
+    }
+    .promo-title {
+        color: var(--text-primary);
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+    .promo-description {
+        color: var(--text-secondary);
+        margin-bottom: 1rem;
+        line-height: 1.6;
+        font-size: 0.9rem;
+        flex-grow: 1; /* Added */
+    }
+    .promo-offer {
+        background: rgba(63, 76, 255, 0.1);
+        color: var(--primary-color);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        display: inline-block;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+    .promo-meta-info {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        margin-bottom: 1rem;
+    }
+    .promo-meta-info span {
+        margin-right: 1rem;
+    }
+    .promo-meta-info i {
+        margin-right: 0.3rem;
+    }
+    .promo-cta {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        margin-top: auto; /* Pushes to bottom */
+    }
+    .promo-cta:hover {
+        color: var(--secondary-color);
+    }
+    .no-promos-message {
+        text-align: center;
+        padding: 2rem;
+        background-color: var(--surface-color);
+        border-radius: 8px;
+        color: var(--text-secondary);
+    }
 </style>
 @endsection
 
@@ -250,7 +449,7 @@
     <div class="row">
         {{-- Sidebar Filters --}}
         <div class="col-lg-3 col-md-4">
-            <div class="filter-sidebar">
+            <div class="filter-sidebar-wrapper">
                 <div class="filter-card sticky-top">
                     <div class="filter-header">
                         <h5 class="mb-0"><i class="bi bi-funnel-fill me-2"></i>Filter & Sort</h5>
@@ -487,6 +686,7 @@
 @endsection
 
 @section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const promoItemsAll = [

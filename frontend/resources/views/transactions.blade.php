@@ -305,8 +305,10 @@
         </div>
         
         <div class="date-range-container">
-            <label for="dateRange">Filter Tanggal</label>
-            <input type="date" class="date-range-input" id="dateRange">
+            <label for="dateRangeStart">From:</label>
+            <input type="date" class="date-range-input" id="dateRangeStart">
+            <label for="dateRangeEnd" class="ms-2">To:</label>
+            <input type="date" class="date-range-input" id="dateRangeEnd">
         </div>
         
         <div class="quick-filters">
@@ -384,8 +386,51 @@
                 </div>
                 <div class="col-lg-6 mb-4">
                     <div class="chart-container">
+                        <h5>Trend Pengeluaran Harian</h5>
+                        <div id="dailySpendingChart" style="min-height: 350px;"></div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="chart-container">
                         <h5>Pengeluaran Bulanan (6 Bulan Terakhir)</h5>
                         <div id="monthlySpendingChart" style="min-height: 350px;"></div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="chart-container">
+                        <h5>Top 5 Merchant Pengeluaran</h5>
+                        <div id="topMerchantChart" style="min-height: 350px;"></div>
+                    </div>
+                </div>
+                <div class="col-12 mb-4">
+                    <div class="chart-container">
+                        <h5>Analisis Timeline Pengeluaran (30 Hari Terakhir)</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <select class="form-select" id="timelineFilter">
+                                    <option value="7">7 Hari Terakhir</option>
+                                    <option value="30" selected>30 Hari Terakhir</option>
+                                    <option value="90">90 Hari Terakhir</option>
+                                    <option value="365">1 Tahun Terakhir</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="form-select" id="categoryFilter">
+                                    <option value="all">Semua Kategori</option>
+                                    <option value="makanan">Makanan & Minuman</option>
+                                    <option value="transport">Transport</option>
+                                    <option value="belanja">Belanja</option>
+                                    <option value="entertainment">Entertainment</option>
+                                    <option value="bills">Tagihan</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-primary" onclick="updateTimelineChart()">
+                                    <i class="bi bi-arrow-clockwise"></i> Update Chart
+                                </button>
+                            </div>
+                        </div>
+                        <div id="timelineChart" style="min-height: 400px;"></div>
                     </div>
                 </div>
             </div>
@@ -418,7 +463,8 @@
         const noTransactionsMessage = document.querySelector('.no-transactions-message'); // More robust selection
 
         // Date Range Filter
-        const dateRangeInput = document.getElementById('dateRange');
+        const dateRangeStart = document.getElementById('dateRangeStart');
+        const dateRangeEnd = document.getElementById('dateRangeEnd');
         const quickFilterBtns = document.querySelectorAll('.quick-filter-btn');
         
         // Set default date range (1 month)
@@ -426,7 +472,8 @@
             const today = new Date();
             const oneMonthAgo = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
             
-            dateRangeInput.value = oneMonthAgo.toISOString().split('T')[0];
+            dateRangeStart.value = oneMonthAgo.toISOString().split('T')[0];
+            dateRangeEnd.value = today.toISOString().split('T')[0];
             
             // Mark first quick filter as active
             quickFilterBtns.forEach(btn => btn.classList.remove('active'));
@@ -454,7 +501,8 @@
                         break;
                 }
                 
-                dateRangeInput.value = startDate.toISOString().split('T')[0];
+                dateRangeStart.value = startDate.toISOString().split('T')[0];
+                dateRangeEnd.value = today.toISOString().split('T')[0];
                 
                 // Update active button
                 quickFilterBtns.forEach(b => b.classList.remove('active'));
@@ -466,51 +514,107 @@
         });
         
         // Date input change listeners
-        dateRangeInput.addEventListener('change', applyDateRangeFilter);
+        dateRangeStart.addEventListener('change', applyDateRangeFilter);
+        dateRangeEnd.addEventListener('change', applyDateRangeFilter);
         
         function applyDateRangeFilter() {
-            const startDate = new Date(dateRangeInput.value);
+            const startDateString = dateRangeStart.value;
+            const endDateString = dateRangeEnd.value;
+
+            if (!startDateString || !endDateString) {
+                console.warn("Date range not fully selected.");
+                return;
+            }
+
+            const startDate = new Date(startDateString);
+            const endDate = new Date(endDateString);
+            // Set endDate to the end of the day for inclusive filtering
+            endDate.setHours(23, 59, 59, 999);
+
+            if (isNaN(startDate.getTime()) || isNaN(endDate.getTime()) || startDate > endDate) {
+                console.warn("Invalid date range.");
+                return;
+            }
             
-            if (!startDate) return;
-            
-            // Filter timeline items based on date range
+            let hasVisibleGroups = false;
             allDateGroups.forEach(group => {
-                const groupDate = new Date(group.dataset.date || '1970-01-01');
-                if (groupDate >= startDate) {
+                const groupDateStr = group.dataset.date;
+                if (!groupDateStr) return;
+                const groupDate = new Date(groupDateStr);
+                
+                if (groupDate >= startDate && groupDate <= endDate) {
                     group.style.display = '';
+                    hasVisibleGroups = true;
                 } else {
                     group.style.display = 'none';
                 }
             });
+
+            // Manage visibility of the main 'no transactions' message from Blade
+            const bladeNoTransactionsMessage = document.querySelector('#timeline-content .no-transactions-message');
+            const searchNoResultsMessage = timeline ? timeline.querySelector('.no-search-results') : null;
+
+            if (bladeNoTransactionsMessage) {
+                // Hide Blade's message if search is active and showing its own, or if there are groups to show
+                if ((searchNoResultsMessage && searchNoResultsMessage.style.display !== 'none') || hasVisibleGroups) {
+                    bladeNoTransactionsMessage.style.display = 'none';
+                } else {
+                    bladeNoTransactionsMessage.style.display = ''; 
+                }
+            }
             
-            // Update charts based on date range (if needed)
-            // This would require backend integration in a real application
-            
-            // Clear active quick filter if custom range
-            const isQuickFilter = quickFilterBtns.some(btn => btn.classList.contains('active'));
-            if (!isQuickFilter) {
+            // Clear active quick filter if the current range doesn't match any quick filter preset
+            let matchedQuickFilter = false;
+            quickFilterBtns.forEach((btn, index) => {
+                const today = new Date();
+                let qStartDate = new Date();
+                const qEndDate = new Date(today.toISOString().split('T')[0]); // Match end date format
+                qEndDate.setHours(23,59,59,999);
+
+                switch (index) {
+                    case 0: qStartDate = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate()); break;
+                    case 1: qStartDate = new Date(today.getFullYear(), today.getMonth() - 3, today.getDate()); break;
+                    case 2: qStartDate = new Date(today.getFullYear(), today.getMonth() - 6, today.getDate()); break;
+                    case 3: qStartDate = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate()); break;
+                }
+                qStartDate.setHours(0,0,0,0);
+                
+                const currentStartDate = new Date(startDateString);
+                currentStartDate.setHours(0,0,0,0);
+                const currentEndDate = new Date(endDateString);
+                currentEndDate.setHours(23,59,59,999);
+
+                if (qStartDate.getTime() === currentStartDate.getTime() && qEndDate.getTime() === currentEndDate.getTime()) {
+                    if(!btn.classList.contains('active')) {
+                        quickFilterBtns.forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                    }
+                    matchedQuickFilter = true;
+                }
+            });
+
+            if (!matchedQuickFilter) {
                 quickFilterBtns.forEach(btn => btn.classList.remove('active'));
             }
         }
         
-        // Initialize default date range
+        // Initialize default date range and apply filter
         setDefaultDateRange();
         applyDateRangeFilter();
 
         const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
         const textColor = currentTheme === 'light' ? '#181C32' : '#FFFFFF'; // Metronic text colors
         const borderColor = currentTheme === 'light' ? '#EBEDF3' : '#2B2B40'; // Metronic border colors
-        @php
-            // Siapkan default warna jika tidak ada
-            $colors = $spendingCategoriesChart['colors'] ?? [
-                '#3F4CFF', '#F1416C', '#50CD89', '#FFC700', '#7239EA', '#43CED7', '#FFA800'
-            ];
-        @endphp
+        
+        // Correctly pass PHP variables to JavaScript
+        const spendingCategoriesChartData = @json($spendingCategoriesChart ?? ['data' => [], 'labels' => [], 'colors' => []]);
+        const monthlySpendingChartData = @json($monthlySpendingChart ?? ['data' => [], 'labels' => []]);
+        const defaultChartColors = ['#3F4CFF', '#F1416C', '#50CD89', '#FFC700', '#7239EA', '#43CED7', '#FFA800'];
+
         // Spending by Category Chart (Pie)
-        @if(isset($spendingCategoriesChart['data']) && count($spendingCategoriesChart['data']) > 0)
-        <script>
+        if (spendingCategoriesChartData && spendingCategoriesChartData.data && spendingCategoriesChartData.data.length > 0) {
             const spendingByCategoryOptions = {
-                series: @json($spendingCategoriesChart['data']),
+                series: spendingCategoriesChartData.data,
                 chart: {
                     type: 'donut',
                     height: 380,
@@ -527,12 +631,12 @@
                         }
                     }
                 },
-                labels: @json($spendingCategoriesChart['labels']),
-                colors: @json($colors),
+                labels: spendingCategoriesChartData.labels,
+                colors: spendingCategoriesChartData.colors && spendingCategoriesChartData.colors.length > 0 ? spendingCategoriesChartData.colors : defaultChartColors,
                 legend: {
                     position: 'bottom',
                     labels: {
-                        colors: typeof textColor !== 'undefined' ? textColor : '#6c757d'
+                        colors: textColor
                     }
                 },
                 plotOptions: {
@@ -545,42 +649,21 @@
                                     show: true,
                                     label: 'Total',
                                     formatter: function (w) {
-                                        return "Rp " + w.globals.seriesTotals.reduce((a, b) => a + b, 0).toLocaleString('id-ID');
+                                        const total = w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+                                        return 'Rp ' + total.toLocaleString('id-ID');
                                     }
                                 }
                             }
                         }
                     }
                 },
-                responsive: [{
-                    breakpoint: 480,
-                    options: {
-                        chart: {
-                            width: '100%'
-                        },
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                }],
                 tooltip: {
                     y: {
                         formatter: function (val) {
-                            return "Rp " + val.toLocaleString('id-ID');
+                            return 'Rp ' + val.toLocaleString('id-ID');
                         }
                     },
-                    theme: typeof currentTheme !== 'undefined' ? currentTheme : 'light'
-                },
-                noData: {
-                    text: "Tidak ada data kategori pengeluaran.",
-                    align: 'center',
-                    verticalAlign: 'middle',
-                    offsetX: 0,
-                    offsetY: 0,
-                    style: {
-                        color: typeof textColor !== 'undefined' ? textColor : '#6c757d',
-                        fontSize: '14px'
-                    }
+                    theme: currentTheme
                 }
             };
 
@@ -593,9 +676,7 @@
                     spendingByCategoryChartEl.innerHTML = '<p class="text-center text-muted">Gagal memuat chart kategori.</p>';
                 }
             }
-        </script>
-        @else
-        <script>
+        } else {
             const fallbackChartContainer = document.querySelector("#spendingByCategoryChart");
             if (fallbackChartContainer) {
                 fallbackChartContainer.innerHTML = `
@@ -606,114 +687,105 @@
                     </div>
                 `;
             }
-        </script>
-        @endif
-
+        }
 
         // Monthly Spending Chart (Area Chart)
-        @if(isset($monthlySpendingChart) && $monthlySpendingChart['data'] && count($monthlySpendingChart['data']) > 0)
-        var monthlySpendingOptions = {
-            series: [{
-                name: 'Total Pengeluaran',
-                data: @json($monthlySpendingChart['data'])
-            }],
-            chart: {
-                height: 380, // Adjusted height
-                type: 'area',
-                toolbar: { 
-                    show: true,
-                    tools: { download: true, selection: true, zoom: true, zoomin: true, zoomout: true, pan: true, reset: true }
-                 },
-                zoom: { enabled: true }
-            },
-            colors: ['#50CD89'], // Metronic success color for spending area
-            dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                curve: 'smooth',
-                width: 3
-            },
-            fill: {
-                type: 'gradient',
-                gradient: {
-                    shadeIntensity: 1,
-                    opacityFrom: 0.7,
-                    opacityTo: 0.3,
-                    stops: [0, 90, 100]
-                }
-            },
-            xaxis: {
-                categories: @json($monthlySpendingChart['labels']),
-                labels: {
-                     style: { colors: textColor }
+        if (monthlySpendingChartData && monthlySpendingChartData.data && monthlySpendingChartData.data.length > 0) {
+            var monthlySpendingOptions = {
+                series: [{
+                    name: 'Total Pengeluaran',
+                    data: monthlySpendingChartData.data
+                }],
+                chart: {
+                    height: 380, // Adjusted height
+                    type: 'area',
+                    toolbar: { 
+                        show: true,
+                        tools: { download: true, selection: true, zoom: true, zoomin: true, zoomout: true, pan: true, reset: true }
+                    },
+                    zoom: { enabled: true }
                 },
-                axisBorder: {
-                    show: false
+                colors: ['#50CD89'], // Metronic success color for spending area
+                dataLabels: {
+                    enabled: false
                 },
-                axisTicks: {
-                    show: false
-                }
-            },
-            yaxis: {
-                title: {
-                    text: 'Jumlah (Rp)',
-                    style: { color: textColor, fontWeight: 500 }
+                stroke: {
+                    curve: 'smooth',
+                    width: 3
                 },
-                labels: {
-                    style: { colors: textColor },
-                    formatter: function (val) {
-                        if (val >= 1000000) {
-                           return "Rp " + (val / 1000000).toFixed(1).replace('.', ',') + " Jt";
-                        } else if (val >= 1000) {
-                            return "Rp " + (val / 1000).toFixed(1).replace('.', ',') + " Rb";
-                        }
-                        return "Rp " + val.toLocaleString('id-ID');
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shadeIntensity: 1,
+                        opacityFrom: 0.7,
+                        opacityTo: 0.3,
+                        stops: [0, 90, 100]
                     }
-                }
-            },
-            grid: {
-                borderColor: borderColor,
-                strokeDashArray: 4,
+                },
+                xaxis: {
+                    categories: monthlySpendingChartData.labels,
+                    labels: {
+                        style: { colors: textColor }
+                    },
+                    axisBorder: {
+                        show: false
+                    },
+                    axisTicks: {
+                        show: false
+                    }
+                },
                 yaxis: {
-                    lines: {
-                        show: true
+                    title: {
+                        text: 'Jumlah (Rp)',
+                        style: { color: textColor, fontWeight: 500 }
+                    },
+                    labels: {
+                        style: { colors: textColor },
+                        formatter: function (val) {
+                            if (val >= 1000000) {
+                                return "Rp " + (val / 1000000).toFixed(1).replace('.', ',') + " Jt";
+                            } else if (val >= 1000) {
+                                return "Rp " + (val / 1000).toFixed(1).replace('.', ',') + " Rb";
+                            }
+                            return "Rp " + val.toLocaleString('id-ID');
+                        }
                     }
-                }
-            },
-            tooltip: {
-                x: {
-                    format: 'MMMM yyyy'
                 },
-                y: {
-                    formatter: function (val) {
-                        return "Rp " + val.toLocaleString('id-ID')
+                grid: {
+                    borderColor: borderColor,
+                    strokeDashArray: 4,
+                    yaxis: {
+                        lines: {
+                            show: true
+                        }
                     }
                 },
-                theme: currentTheme
-            },
-            noData: {
-                text: "Tidak ada data pengeluaran bulanan.",
-                align: 'center',
-                verticalAlign: 'middle',
-                offsetX: 0,
-                offsetY: 0,
-                style: {
-                    color: textColor,
-                    fontSize: '14px',
+                tooltip: {
+                    x: {
+                        format: 'MMMM yyyy'
+                    },
+                    y: {
+                        formatter: function (val) {
+                            return "Rp " + val.toLocaleString('id-ID')
+                        }
+                    },
+                    theme: currentTheme
                 }
+            };
+
+            var monthlySpendingChartEl = document.querySelector("#monthlySpendingChart");
+            if(monthlySpendingChartEl && typeof ApexCharts !== 'undefined'){
+                var monthlySpendingChart = new ApexCharts(monthlySpendingChartEl, monthlySpendingOptions);
+                monthlySpendingChart.render();
+            } else {
+                if(monthlySpendingChartEl) monthlySpendingChartEl.innerHTML = '<p class="text-center text-muted">Gagal memuat chart bulanan.</p>';
             }
-        };
-        var monthlySpendingChartEl = document.querySelector("#monthlySpendingChart");
-        if(monthlySpendingChartEl && typeof ApexCharts !== 'undefined'){
-            var monthlySpendingChart = new ApexCharts(monthlySpendingChartEl, monthlySpendingOptions);
-            monthlySpendingChart.render();
         } else {
-             if(monthlySpendingChartEl) monthlySpendingChartEl.innerHTML = '<p class="text-center text-muted">Gagal memuat chart bulanan.</p>';
+            const monthlyFallbackContainer = document.querySelector("#monthlySpendingChart");
+            if (monthlyFallbackContainer) {
+                 monthlyFallbackContainer.innerHTML = '<div class="no-transactions-message"><i class="bi bi-bar-chart-line fs-3x text-muted mb-3"></i><h4 class="text-muted">Belum Ada Data Bulanan</h4><p class="text-muted">Riwayat pengeluaran bulanan Anda akan muncul di sini.</p></div>';
+            }
         }
-        @else
-        document.querySelector("#monthlySpendingChart").innerHTML = '<div class="no-transactions-message"><i class="bi bi-bar-chart-line fs-3x text-muted mb-3"></i><h4 class="text-muted">Belum Ada Data Bulanan</h4><p class="text-muted">Riwayat pengeluaran bulanan Anda akan muncul di sini.</p></div>';
-        @endif
 
         // Update chart themes on theme toggle
         const themeToggle = document.getElementById('themeToggle');
@@ -1015,32 +1087,6 @@
             window.monthlySpendingChartInstance = monthlySpendingChart;
         }
 
-        // Apply date range filter and update charts
-        function applyDateRangeFilter() {
-            const startDate = new Date(dateRangeInput.value);
-            
-            if (!startDate) return;
-            
-            // Filter timeline items based on date range
-            allDateGroups.forEach(group => {
-                const groupDate = new Date(group.dataset.date || '1970-01-01');
-                if (groupDate >= startDate) {
-                    group.style.display = '';
-                } else {
-                    group.style.display = 'none';
-                }
-            });
-            
-            // Update charts with filtered data
-            generateChartsFromTimelineData();
-            
-            // Clear active quick filter if custom range
-            const isQuickFilter = quickFilterBtns.some(btn => btn.classList.contains('active'));
-            if (!isQuickFilter) {
-                quickFilterBtns.forEach(btn => btn.classList.remove('active'));
-            }
-        }
-
         // Search functionality with chart updates
         if (searchInput && timeline) {
             searchInput.addEventListener('input', function() {
@@ -1115,7 +1161,8 @@
                         break;
                 }
                 
-                dateRangeInput.value = startDate.toISOString().split('T')[0];
+                dateRangeStart.value = startDate.toISOString().split('T')[0];
+                dateRangeEnd.value = today.toISOString().split('T')[0];
                 
                 // Update active button
                 quickFilterBtns.forEach(b => b.classList.remove('active'));
@@ -1126,8 +1173,393 @@
             });
         });
 
-        // Initialize charts on page load
-        generateChartsFromTimelineData();
+        // Initialize charts when analytics tab is shown
+        const analyticsTab = document.getElementById('analytics-tab');
+        if (analyticsTab) {
+            analyticsTab.addEventListener('shown.bs.tab', function () {
+                // Ensure this is the first time initializing or if data needs refresh
+                // For now, we assume it initializes once or re-initializes if needed
+                initializeCharts(); 
+            });
+        }
+
+        // If the analytics tab is already active on page load (e.g. due to URL hash or browser history)
+        // We need to initialize the charts then as well.
+        if (analyticsTab && analyticsTab.classList.contains('active')) {
+            initializeCharts();
+        }
+
+        // Chart initialization function
+        function initializeCharts() {
+            const currentTheme = document.documentElement.getAttribute('data-bs-theme') || 'dark';
+            const textColor = currentTheme === 'light' ? '#181C32' : '#FFFFFF';
+            const borderColor = currentTheme === 'light' ? '#EBEDF3' : '#2B2B40';
+
+            // Sample data for demonstration
+            const sampleCategoryData = {
+                labels: ['Makanan & Minuman', 'Transport', 'Belanja', 'Entertainment', 'Tagihan'],
+                data: [3500000, 1200000, 2800000, 800000, 1500000],
+                colors: ['#3F4CFF', '#F1416C', '#50CD89', '#FFC700', '#7239EA']
+            };
+
+            const sampleDailyData = generateDailyData();
+            const sampleMonthlyData = generateMonthlyData();
+            const sampleMerchantData = {
+                labels: ['Gojek', 'Shopee', 'Grab', 'Tokopedia', 'Indomaret'],
+                data: [800000, 1200000, 600000, 900000, 400000]
+            };
+
+            // 1. Category Pie Chart
+            initCategoryChart(sampleCategoryData, textColor, currentTheme);
+            
+            // 2. Daily Spending Chart
+            initDailyChart(sampleDailyData, textColor, borderColor, currentTheme);
+            
+            // 3. Monthly Spending Chart
+            initMonthlyChart(sampleMonthlyData, textColor, borderColor, currentTheme);
+            
+            // 4. Top Merchant Chart
+            initMerchantChart(sampleMerchantData, textColor, borderColor, currentTheme);
+            
+            // 5. Timeline Chart
+            initTimelineChart(textColor, borderColor, currentTheme);
+        }
+
+        // Category Chart
+        function initCategoryChart(data, textColor, theme) {
+            const options = {
+                series: data.data,
+                chart: {
+                    type: 'donut',
+                    height: 350,
+                    toolbar: { show: false }
+                },
+                labels: data.labels,
+                colors: data.colors,
+                legend: {
+                    position: 'bottom',
+                    labels: { colors: textColor }
+                },
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            size: '65%',
+                            labels: {
+                                show: true,
+                                total: {
+                                    show: true,
+                                    label: 'Total',
+                                    formatter: function (w) {
+                                        const total = w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+                                        return 'Rp ' + total.toLocaleString('id-ID');
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                tooltip: {
+                    y: {
+                        formatter: function (val) {
+                            return 'Rp ' + val.toLocaleString('id-ID');
+                        }
+                    },
+                    theme: theme
+                }
+            };
+
+            const chart = new ApexCharts(document.querySelector("#spendingByCategoryChart"), options);
+            chart.render();
+        }
+
+        // Daily Spending Chart
+        function initDailyChart(data, textColor, borderColor, theme) {
+            const options = {
+                series: [{
+                    name: 'Pengeluaran Harian',
+                    data: data.data
+                }],
+                chart: {
+                    type: 'line',
+                    height: 350,
+                    toolbar: { show: true }
+                },
+                colors: ['#3F4CFF'],
+                stroke: {
+                    curve: 'smooth',
+                    width: 3
+                },
+                xaxis: {
+                    categories: data.labels,
+                    labels: { style: { colors: textColor } }
+                },
+                yaxis: {
+                    labels: {
+                        style: { colors: textColor },
+                        formatter: function (val) {
+                            return 'Rp ' + (val / 1000).toFixed(0) + 'K';
+                        }
+                    }
+                },
+                grid: {
+                    borderColor: borderColor,
+                    strokeDashArray: 4
+                },
+                tooltip: {
+                    y: {
+                        formatter: function (val) {
+                            return 'Rp ' + val.toLocaleString('id-ID');
+                        }
+                    },
+                    theme: theme
+                }
+            };
+
+            const chart = new ApexCharts(document.querySelector("#dailySpendingChart"), options);
+            chart.render();
+        }
+
+        // Monthly Spending Chart
+        function initMonthlyChart(data, textColor, borderColor, theme) {
+            const options = {
+                series: [{
+                    name: 'Pengeluaran Bulanan',
+                    data: data.data
+                }],
+                chart: {
+                    type: 'area',
+                    height: 350,
+                    toolbar: { show: true }
+                },
+                colors: ['#50CD89'],
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shadeIntensity: 1,
+                        opacityFrom: 0.7,
+                        opacityTo: 0.3
+                    }
+                },
+                stroke: {
+                    curve: 'smooth',
+                    width: 3
+                },
+                xaxis: {
+                    categories: data.labels,
+                    labels: { style: { colors: textColor } }
+                },
+                yaxis: {
+                    labels: {
+                        style: { colors: textColor },
+                        formatter: function (val) {
+                            return 'Rp ' + (val / 1000000).toFixed(1) + 'M';
+                        }
+                    }
+                },
+                grid: {
+                    borderColor: borderColor,
+                    strokeDashArray: 4
+                },
+                tooltip: {
+                    y: {
+                        formatter: function (val) {
+                            return 'Rp ' + val.toLocaleString('id-ID');
+                        }
+                    },
+                    theme: theme
+                }
+            };
+
+            const chart = new ApexCharts(document.querySelector("#monthlySpendingChart"), options);
+            chart.render();
+        }
+
+        // Top Merchant Chart
+        function initMerchantChart(data, textColor, borderColor, theme) {
+            const options = {
+                series: [{
+                    name: 'Pengeluaran',
+                    data: data.data
+                }],
+                chart: {
+                    type: 'bar',
+                    height: 350,
+                    toolbar: { show: true }
+                },
+                colors: ['#F1416C'],
+                plotOptions: {
+                    bar: {
+                        horizontal: true,
+                        borderRadius: 4
+                    }
+                },
+                xaxis: {
+                    categories: data.labels,
+                    labels: {
+                        style: { colors: textColor },
+                        formatter: function (val) {
+                            return 'Rp ' + (val / 1000).toFixed(0) + 'K';
+                        }
+                    }
+                },
+                yaxis: {
+                    labels: { style: { colors: textColor } }
+                },
+                grid: {
+                    borderColor: borderColor,
+                    strokeDashArray: 4
+                },
+                tooltip: {
+                    y: {
+                        formatter: function (val) {
+                            return 'Rp ' + val.toLocaleString('id-ID');
+                        }
+                    },
+                    theme: theme
+                }
+            };
+
+            const chart = new ApexCharts(document.querySelector("#topMerchantChart"), options);
+            chart.render();
+        }
+
+        // Timeline Chart
+        let timelineChart;
+        function initTimelineChart(textColor, borderColor, theme) {
+            const data = generateTimelineData(30, 'all');
+            
+            const options = {
+                series: [{
+                    name: 'Pengeluaran',
+                    data: data.data
+                }],
+                chart: {
+                    type: 'area',
+                    height: 400,
+                    toolbar: { show: true },
+                    zoom: { enabled: true }
+                },
+                colors: ['#7239EA'],
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shadeIntensity: 1,
+                        opacityFrom: 0.5,
+                        opacityTo: 0.1
+                    }
+                },
+                stroke: {
+                    curve: 'smooth',
+                    width: 2
+                },
+                xaxis: {
+                    type: 'datetime',
+                    categories: data.labels,
+                    labels: { style: { colors: textColor } }
+                },
+                yaxis: {
+                    labels: {
+                        style: { colors: textColor },
+                        formatter: function (val) {
+                            return 'Rp ' + (val / 1000).toFixed(0) + 'K';
+                        }
+                    }
+                },
+                grid: {
+                    borderColor: borderColor,
+                    strokeDashArray: 4
+                },
+                tooltip: {
+                    x: {
+                        format: 'dd MMM yyyy'
+                    },
+                    y: {
+                        formatter: function (val) {
+                            return 'Rp ' + val.toLocaleString('id-ID');
+                        }
+                    },
+                    theme: theme
+                }
+            };
+
+            timelineChart = new ApexCharts(document.querySelector("#timelineChart"), options);
+            timelineChart.render();
+        }
+
+        // Update Timeline Chart Function
+        window.updateTimelineChart = function() {
+            const days = document.getElementById('timelineFilter').value;
+            const category = document.getElementById('categoryFilter').value;
+            
+            const data = generateTimelineData(parseInt(days), category);
+            
+            if (timelineChart) {
+                timelineChart.updateSeries([{
+                    name: 'Pengeluaran',
+                    data: data.data
+                }]);
+                timelineChart.updateOptions({
+                    xaxis: {
+                        categories: data.labels
+                    }
+                });
+            }
+        };
+
+        // Data generation functions
+        function generateDailyData() {
+            const labels = [];
+            const data = [];
+            const today = new Date();
+            
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                labels.push(date.toLocaleDateString('id-ID', { weekday: 'short' }));
+                data.push(Math.floor(Math.random() * 500000) + 100000);
+            }
+            
+            return { labels, data };
+        }
+
+        function generateMonthlyData() {
+            const labels = [];
+            const data = [];
+            const today = new Date();
+            
+            for (let i = 5; i >= 0; i--) {
+                const date = new Date(today);
+                date.setMonth(date.getMonth() - i);
+                labels.push(date.toLocaleDateString('id-ID', { month: 'short', year: 'numeric' }));
+                data.push(Math.floor(Math.random() * 10000000) + 5000000);
+            }
+            
+            return { labels, data };
+        }
+
+        function generateTimelineData(days, category) {
+            const labels = [];
+            const data = [];
+            const today = new Date();
+            
+            for (let i = days - 1; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                labels.push(date.toISOString().split('T')[0]);
+                
+                // Simulate different spending patterns based on category
+                let baseAmount = 200000;
+                if (category === 'makanan') baseAmount = 150000;
+                else if (category === 'transport') baseAmount = 80000;
+                else if (category === 'belanja') baseAmount = 300000;
+                else if (category === 'entertainment') baseAmount = 120000;
+                else if (category === 'bills') baseAmount = 250000;
+                
+                data.push(Math.floor(Math.random() * baseAmount) + baseAmount / 2);
+            }
+            
+            return { labels, data };
+        }
     });
 </script>
 @endsection 

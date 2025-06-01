@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\ContentController;
+use App\Http\Controllers\SubscriptionController;
 
 // Landing page
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -41,4 +42,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/logout', [DashboardController::class, 'logout'])->name('logout');
     Route::get('/billing', [DashboardController::class, 'billing'])->name('billing');
     Route::get('/privileges', [DashboardController::class, 'privileges'])->name('privileges');
+    
+    // Subscription routes
+    Route::prefix('subscriptions')->name('subscriptions.')->group(function () {
+        Route::get('/', [SubscriptionController::class, 'index'])->name('index');
+        Route::get('/show', [SubscriptionController::class, 'show'])->name('show');
+        Route::post('/subscribe/{plan}', [SubscriptionController::class, 'subscribe'])->name('subscribe');
+        Route::post('/upgrade/{plan}', [SubscriptionController::class, 'upgrade'])->name('upgrade');
+        Route::post('/downgrade/{plan}', [SubscriptionController::class, 'downgrade'])->name('downgrade');
+        Route::post('/cancel', [SubscriptionController::class, 'cancel'])->name('cancel');
+        Route::post('/resume', [SubscriptionController::class, 'resume'])->name('resume');
+        Route::get('/compare', [SubscriptionController::class, 'compare'])->name('compare');
+        Route::get('/status', [SubscriptionController::class, 'status'])->name('status');
+    });
 });

@@ -24,6 +24,113 @@
         margin: 0 auto;
     }
 
+    /* Presets Section */
+    .presets-section {
+        background-color: var(--card-color);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 5px 20px var(--shadow);
+    }
+    .presets-header {
+        display: flex;
+        justify-content: between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+    .presets-header h2 {
+        color: var(--text-primary);
+        font-size: 1.4rem;
+        font-weight: 600;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .preset-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    .preset-card {
+        background: var(--surface-color);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 1rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+    }
+    .preset-card:hover {
+        border-color: var(--primary-color);
+        transform: translateY(-2px);
+    }
+    .preset-card.active {
+        border-color: var(--primary-color);
+        background: rgba(63, 76, 255, 0.1);
+    }
+    .preset-name {
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .preset-cards-list {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        margin-bottom: 0.5rem;
+    }
+    .preset-actions {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        display: flex;
+        gap: 0.25rem;
+    }
+    .preset-action-btn {
+        width: 24px;
+        height: 24px;
+        border: none;
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--text-secondary);
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .preset-action-btn:hover {
+        background: var(--primary-color);
+        color: white;
+    }
+    .preset-action-btn.delete:hover {
+        background: #f1416c;
+    }
+    .create-preset-card {
+        border: 2px dashed var(--border-color);
+        background: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        color: var(--text-secondary);
+        transition: all 0.3s ease;
+    }
+    .create-preset-card:hover {
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+    }
+    .create-preset-card i {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+
     /* Filter Options */
     .filter-options {
         display: flex;
@@ -47,6 +154,7 @@
         background: var(--primary-color);
         color: white;
         border-color: var(--primary-color);
+        text-decoration: none;
     }
 
     /* Bank Section */
@@ -96,6 +204,10 @@
     .card-item.not-owned {
         opacity: 0.4;
     }
+    .card-item.preset-selected {
+        border-color: var(--secondary-color);
+        box-shadow: 0 5px 20px rgba(161, 79, 255, 0.3);
+    }
     .card-item:hover {
         transform: translateY(-5px);
         box-shadow: 0 10px 30px var(--shadow);
@@ -104,8 +216,13 @@
     .card-header {
         display: flex;
         justify-content: space-between;
-        align-items: flex-start;
+        align-items: center;
         margin-bottom: 1rem;
+    }
+    .card-info {
+        flex: 1;
+        min-width: 0;
+        margin-right: 1rem;
     }
     .card-info h3 {
         font-size: 1.2rem;
@@ -122,7 +239,7 @@
     .toggle-switch {
         position: relative;
         display: inline-block;
-        width: 50px;
+        width: 48px;
         height: 24px;
     }
     .toggle-switch input {
@@ -137,7 +254,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: #ccc;
+        background-color: var(--border-color);
         transition: .4s;
         border-radius: 24px;
     }
@@ -151,12 +268,30 @@
         background-color: white;
         transition: .4s;
         border-radius: 50%;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     }
     input:checked + .toggle-slider {
         background-color: var(--primary-color);
     }
     input:checked + .toggle-slider:before {
-        transform: translateX(26px);
+        transform: translateX(24px);
+    }
+
+    /* Preset Selection Checkbox */
+    .preset-checkbox {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        width: 20px;
+        height: 20px;
+        accent-color: var(--secondary-color);
+        display: none;
+    }
+    .preset-mode .preset-checkbox {
+        display: block;
+    }
+    .preset-mode .card-item {
+        cursor: pointer;
     }
 
     .card-features {
@@ -194,30 +329,36 @@
     .card-details .detail-row:last-child {
         margin-bottom: 0;
     }
+    .card-details .detail-value {
+        font-weight: 500;
+        color: var(--text-primary);
+    }
 
-    /* Owned Card Badge */
     .owned-badge {
         position: absolute;
-        top: 12px;
-        right: 12px;
+        top: -8px;
+        right: -8px;
         background: var(--primary-color);
         color: white;
-        padding: 0.2rem 0.5rem;
-        border-radius: 12px;
         font-size: 0.7rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 10px;
         font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.2rem;
+        box-shadow: 0 2px 8px rgba(63, 76, 255, 0.3);
+    }
+    .card-item.not-owned .owned-badge {
         display: none;
     }
-    .card-item.owned .owned-badge {
-        display: block;
-    }
 
-    /* Stats Section */
+    /* Statistics Cards */
     .deck-stats {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1.5rem;
-        margin-bottom: 3rem;
+        gap: 1rem;
+        margin-bottom: 2rem;
     }
     .stat-card {
         background: var(--card-color);
@@ -225,6 +366,11 @@
         border-radius: 12px;
         padding: 1.5rem;
         text-align: center;
+        box-shadow: 0 5px 20px var(--shadow);
+        transition: transform 0.3s ease;
+    }
+    .stat-card:hover {
+        transform: translateY(-3px);
     }
     .stat-number {
         font-size: 2rem;
@@ -236,6 +382,66 @@
         color: var(--text-secondary);
         font-size: 0.9rem;
     }
+
+    /* Preset Creation Modal Styles */
+    .modal-content {
+        background: var(--card-color);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+    }
+    .modal-header {
+        border-bottom: 1px solid var(--border-color);
+    }
+    .modal-title {
+        color: var(--text-primary);
+    }
+    .modal-body {
+        color: var(--text-secondary);
+    }
+    .form-control {
+        background: var(--surface-color);
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+    }
+    .form-control:focus {
+        background: var(--surface-color);
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(63, 76, 255, 0.25);
+        color: var(--text-primary);
+    }
+
+    /* Preset Mode Toolbar */
+    .preset-toolbar {
+        background: var(--card-color);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        display: none;
+    }
+    .preset-mode .preset-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .preset-toolbar-left {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    .selected-count {
+        color: var(--text-primary);
+        font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+        .preset-cards {
+            grid-template-columns: 1fr;
+        }
+        .cards-grid {
+            grid-template-columns: 1fr;
+        }
+    }
 </style>
 @endsection
 
@@ -243,7 +449,7 @@
 <div class="container content-wrapper-padding">
     <div class="page-header">
         <h1>My Card Deck</h1>
-        <p>Manage your collection of credit cards. Toggle to add or remove cards from your wallet.</p>
+        <p>Manage your collection of credit cards and create presets for smart promotion filtering.</p>
     </div>
 
     {{-- Deck Statistics --}}
@@ -259,6 +465,45 @@
         <div class="stat-card">
             <div class="stat-number" id="totalRewards">0</div>
             <div class="stat-label">Active Rewards Programs</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="presetsCount">0</div>
+            <div class="stat-label">Saved Presets</div>
+        </div>
+    </div>
+
+    {{-- Presets Section --}}
+    <div class="presets-section">
+        <div class="presets-header">
+            <h2><i class="bi bi-collection-fill"></i> Card Presets</h2>
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-secondary btn-sm" id="createPresetBtn">
+                    <i class="bi bi-plus"></i> Create Preset
+                </button>
+                <button class="btn btn-outline-primary btn-sm" id="usePresetForPromosBtn" disabled>
+                    <i class="bi bi-funnel"></i> Filter Promotions
+                </button>
+            </div>
+        </div>
+        
+        <div class="preset-cards" id="presetCards">
+            <div class="preset-card create-preset-card" id="createPresetCard">
+                <i class="bi bi-plus-circle"></i>
+                <span>Create New Preset</span>
+            </div>
+        </div>
+    </div>
+
+    {{-- Preset Creation Toolbar --}}
+    <div class="preset-toolbar" id="presetToolbar">
+        <div class="preset-toolbar-left">
+            <span class="selected-count" id="selectedCount">0 cards selected</span>
+            <button class="btn btn-sm btn-outline-secondary" id="selectAllBtn">Select All Owned</button>
+            <button class="btn btn-sm btn-outline-secondary" id="clearSelectionBtn">Clear Selection</button>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-outline-danger" id="cancelPresetBtn">Cancel</button>
+            <button class="btn btn-sm btn-primary" id="savePresetBtn" disabled>Save Preset</button>
         </div>
     </div>
 
@@ -397,14 +642,14 @@
                      data-card-id="{{ $card->id }}" 
                      data-type="{{ $card->type }}"
                      data-credit-limit="{{ $card->credit_limit }}">
+                    <input type="checkbox" class="preset-checkbox" data-card-id="{{ $card->id }}">
                     <div class="owned-badge">
                         <i class="bi bi-check-circle-fill"></i> Owned
                     </div>
-                    
                     <div class="card-header">
                         <div class="card-info">
                             <h3>{{ $card->name }}</h3>
-                            <p>{{ ucfirst($card->type) }}</p>
+                            <p>{{ $card->bank }}</p>
                         </div>
                         <label class="toggle-switch">
                             <input type="checkbox" {{ $card->owned ? 'checked' : '' }} data-card-id="{{ $card->id }}">
@@ -415,7 +660,7 @@
                     <div class="card-features">
                         <ul>
                             @foreach($card->features as $feature)
-                            <li><i class="bi bi-star-fill"></i> {{ $feature }}</li>
+                            <li><i class="bi bi-check-circle"></i> {{ $feature }}</li>
                             @endforeach
                         </ul>
                     </div>
@@ -423,15 +668,15 @@
                     <div class="card-details">
                         <div class="detail-row">
                             <span>Annual Fee:</span>
-                            <span><strong>Rp {{ number_format($card->annual_fee, 0, ',', '.') }}</strong></span>
+                            <span class="detail-value">Rp {{ number_format($card->annual_fee) }}</span>
                         </div>
                         <div class="detail-row">
                             <span>Min. Income:</span>
-                            <span>Rp {{ number_format($card->min_income, 0, ',', '.') }}/month</span>
+                            <span class="detail-value">Rp {{ number_format($card->min_income) }}</span>
                         </div>
                         <div class="detail-row">
                             <span>Credit Limit:</span>
-                            <span><strong>Rp {{ number_format($card->credit_limit, 0, ',', '.') }}</strong></span>
+                            <span class="detail-value">Rp {{ number_format($card->credit_limit) }}</span>
                         </div>
                     </div>
                 </div>
@@ -441,6 +686,70 @@
         @endforeach
     </div>
 </div>
+
+<!-- Preset Creation Modal -->
+<div class="modal fade" id="presetModal" tabindex="-1" aria-labelledby="presetModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="presetModalLabel">Create New Preset</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="presetForm">
+                    <div class="mb-3">
+                        <label for="presetName" class="form-label">Preset Name</label>
+                        <input type="text" class="form-control" id="presetName" placeholder="e.g., Travel Cards, Daily Cashback, Premium Cards" required>
+                        <div class="form-text">Give your preset a memorable name that describes the card combination.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="presetDescription" class="form-label">Description (Optional)</label>
+                        <textarea class="form-control" id="presetDescription" rows="2" placeholder="Brief description of this preset's purpose"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Selected Cards</label>
+                        <div id="selectedCardsPreview" class="border rounded p-2" style="min-height: 60px; background: var(--surface-color);">
+                            <small class="text-muted">No cards selected yet. Select cards from your deck to add them to this preset.</small>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="savePresetModalBtn" disabled>Create Preset</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Preset Edit Modal -->
+<div class="modal fade" id="editPresetModal" tabindex="-1" aria-labelledby="editPresetModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editPresetModalLabel">Edit Preset</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editPresetForm">
+                    <input type="hidden" id="editPresetId">
+                    <div class="mb-3">
+                        <label for="editPresetName" class="form-label">Preset Name</label>
+                        <input type="text" class="form-control" id="editPresetName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editPresetDescription" class="form-label">Description (Optional)</label>
+                        <textarea class="form-control" id="editPresetDescription" rows="2"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="updatePresetBtn">Update Preset</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('scripts')
@@ -448,18 +757,322 @@
 document.addEventListener('DOMContentLoaded', function() {
     const cardData = @json($creditCards);
     let ownedCards = cardData.filter(card => card.owned);
-    
+    let presets = JSON.parse(localStorage.getItem('cardPresets') || '[]');
+    let activePreset = null;
+    let isPresetMode = false;
+    let selectedCardsForPreset = [];
+
+    // DOM Elements
+    const cardsContainer = document.getElementById('cardsContainer');
+    const presetCards = document.getElementById('presetCards');
+    const createPresetBtn = document.getElementById('createPresetBtn');
+    const createPresetCard = document.getElementById('createPresetCard');
+    const presetToolbar = document.getElementById('presetToolbar');
+    const selectedCount = document.getElementById('selectedCount');
+    const selectAllBtn = document.getElementById('selectAllBtn');
+    const clearSelectionBtn = document.getElementById('clearSelectionBtn');
+    const cancelPresetBtn = document.getElementById('cancelPresetBtn');
+    const savePresetBtn = document.getElementById('savePresetBtn');
+    const usePresetForPromosBtn = document.getElementById('usePresetForPromosBtn');
+
+    // Modal elements
+    const presetModal = new bootstrap.Modal(document.getElementById('presetModal'));
+    const editPresetModal = new bootstrap.Modal(document.getElementById('editPresetModal'));
+    const savePresetModalBtn = document.getElementById('savePresetModalBtn');
+    const updatePresetBtn = document.getElementById('updatePresetBtn');
+    const selectedCardsPreview = document.getElementById('selectedCardsPreview');
+
+    // Initialize
+    updateStats();
+    renderPresets();
+
     // Update statistics
     function updateStats() {
         const ownedCount = ownedCards.length;
         const totalLimit = ownedCards.reduce((sum, card) => sum + card.credit_limit, 0);
-        const totalRewards = ownedCards.length; // Simplified - each card = 1 reward program
+        const totalRewards = ownedCards.length;
+        const presetsCount = presets.length;
         
         document.getElementById('ownedCount').textContent = ownedCount;
         document.getElementById('totalLimit').textContent = 'Rp ' + totalLimit.toLocaleString('id-ID');
         document.getElementById('totalRewards').textContent = totalRewards;
+        document.getElementById('presetsCount').textContent = presetsCount;
     }
-    
+
+    // Render presets
+    function renderPresets() {
+        const createCard = presetCards.querySelector('.create-preset-card');
+        // Clear existing preset cards except create card
+        Array.from(presetCards.children).forEach(child => {
+            if (!child.classList.contains('create-preset-card')) {
+                child.remove();
+            }
+        });
+
+        presets.forEach((preset, index) => {
+            const presetCard = document.createElement('div');
+            presetCard.className = `preset-card ${activePreset === index ? 'active' : ''}`;
+            presetCard.dataset.presetIndex = index;
+            
+            const cardNames = preset.cards.map(cardId => {
+                const card = cardData.find(c => c.id === cardId);
+                return card ? card.name : 'Unknown Card';
+            }).join(', ');
+
+            presetCard.innerHTML = `
+                <div class="preset-actions">
+                    <button class="preset-action-btn edit" data-preset-index="${index}" title="Edit">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="preset-action-btn delete" data-preset-index="${index}" title="Delete">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+                <div class="preset-name">${preset.name}</div>
+                <div class="preset-cards-list">${preset.cards.length} card(s): ${cardNames}</div>
+                ${preset.description ? `<div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.5rem;">${preset.description}</div>` : ''}
+            `;
+            
+            presetCards.insertBefore(presetCard, createCard);
+        });
+
+        // Update use preset button state
+        usePresetForPromosBtn.disabled = activePreset === null;
+    }
+
+    // Toggle preset selection
+    function togglePresetSelection(index) {
+        if (activePreset === index) {
+            activePreset = null;
+            highlightPresetCards([]);
+        } else {
+            activePreset = index;
+            const preset = presets[index];
+            highlightPresetCards(preset.cards);
+        }
+        renderPresets();
+    }
+
+    // Highlight cards in preset
+    function highlightPresetCards(cardIds) {
+        document.querySelectorAll('.card-item').forEach(card => {
+            const cardId = parseInt(card.dataset.cardId);
+            if (cardIds.includes(cardId)) {
+                card.classList.add('preset-selected');
+            } else {
+                card.classList.remove('preset-selected');
+            }
+        });
+    }
+
+    // Enter preset creation mode
+    function enterPresetMode() {
+        isPresetMode = true;
+        selectedCardsForPreset = [];
+        cardsContainer.classList.add('preset-mode');
+        updateSelectedCount();
+        updateSelectedCardsPreview();
+    }
+
+    // Exit preset creation mode
+    function exitPresetMode() {
+        isPresetMode = false;
+        selectedCardsForPreset = [];
+        cardsContainer.classList.remove('preset-mode');
+        document.querySelectorAll('.preset-checkbox').forEach(cb => cb.checked = false);
+        updateSelectedCardsPreview();
+    }
+
+    // Update selected count
+    function updateSelectedCount() {
+        selectedCount.textContent = `${selectedCardsForPreset.length} cards selected`;
+        savePresetBtn.disabled = selectedCardsForPreset.length === 0;
+        savePresetModalBtn.disabled = selectedCardsForPreset.length === 0;
+    }
+
+    // Update selected cards preview
+    function updateSelectedCardsPreview() {
+        if (selectedCardsForPreset.length === 0) {
+            selectedCardsPreview.innerHTML = '<small class="text-muted">No cards selected yet. Select cards from your deck to add them to this preset.</small>';
+        } else {
+            const cardNames = selectedCardsForPreset.map(cardId => {
+                const card = cardData.find(c => c.id === cardId);
+                return card ? card.name : 'Unknown Card';
+            });
+            selectedCardsPreview.innerHTML = cardNames.map(name => 
+                `<span class="badge bg-primary me-1 mb-1">${name}</span>`
+            ).join('');
+        }
+    }
+
+    // Save preset
+    function savePreset() {
+        const name = document.getElementById('presetName').value.trim();
+        const description = document.getElementById('presetDescription').value.trim();
+
+        if (!name || selectedCardsForPreset.length === 0) return;
+
+        const newPreset = {
+            id: Date.now(),
+            name,
+            description,
+            cards: [...selectedCardsForPreset],
+            createdAt: new Date().toISOString()
+        };
+
+        presets.push(newPreset);
+        localStorage.setItem('cardPresets', JSON.stringify(presets));
+
+        // Reset form
+        document.getElementById('presetForm').reset();
+        selectedCardsForPreset = [];
+        exitPresetMode();
+        updateStats();
+        renderPresets();
+        presetModal.hide();
+    }
+
+    // Delete preset
+    function deletePreset(index) {
+        if (confirm('Are you sure you want to delete this preset?')) {
+            if (activePreset === index) {
+                activePreset = null;
+                highlightPresetCards([]);
+            } else if (activePreset > index) {
+                activePreset--;
+            }
+            
+            presets.splice(index, 1);
+            localStorage.setItem('cardPresets', JSON.stringify(presets));
+            updateStats();
+            renderPresets();
+        }
+    }
+
+    // Edit preset
+    function editPreset(index) {
+        const preset = presets[index];
+        document.getElementById('editPresetId').value = index;
+        document.getElementById('editPresetName').value = preset.name;
+        document.getElementById('editPresetDescription').value = preset.description || '';
+        editPresetModal.show();
+    }
+
+    // Update preset
+    function updatePreset() {
+        const index = parseInt(document.getElementById('editPresetId').value);
+        const name = document.getElementById('editPresetName').value.trim();
+        const description = document.getElementById('editPresetDescription').value.trim();
+
+        if (!name) return;
+
+        presets[index].name = name;
+        presets[index].description = description;
+        presets[index].updatedAt = new Date().toISOString();
+
+        localStorage.setItem('cardPresets', JSON.stringify(presets));
+        renderPresets();
+        editPresetModal.hide();
+    }
+
+    // Use preset for promotions filtering
+    function usePresetForPromotions() {
+        if (activePreset === null) return;
+        
+        const preset = presets[activePreset];
+        // Store selected preset in session storage for promotions page
+        sessionStorage.setItem('selectedPreset', JSON.stringify(preset));
+        
+        // Redirect to promotions page with preset filter
+        window.location.href = '{{ route("promotions.index") }}?preset=' + encodeURIComponent(preset.name);
+    }
+
+    // Event Listeners
+    createPresetBtn.addEventListener('click', () => {
+        enterPresetMode();
+        presetModal.show();
+    });
+
+    createPresetCard.addEventListener('click', () => {
+        enterPresetMode();
+        presetModal.show();
+    });
+
+    cancelPresetBtn.addEventListener('click', exitPresetMode);
+
+    savePresetBtn.addEventListener('click', () => {
+        presetModal.show();
+    });
+
+    savePresetModalBtn.addEventListener('click', savePreset);
+    updatePresetBtn.addEventListener('click', updatePreset);
+
+    selectAllBtn.addEventListener('click', () => {
+        selectedCardsForPreset = ownedCards.map(card => card.id);
+        document.querySelectorAll('.preset-checkbox').forEach(cb => {
+            cb.checked = ownedCards.some(card => card.id === parseInt(cb.dataset.cardId));
+        });
+        updateSelectedCount();
+        updateSelectedCardsPreview();
+    });
+
+    clearSelectionBtn.addEventListener('click', () => {
+        selectedCardsForPreset = [];
+        document.querySelectorAll('.preset-checkbox').forEach(cb => cb.checked = false);
+        updateSelectedCount();
+        updateSelectedCardsPreview();
+    });
+
+    usePresetForPromosBtn.addEventListener('click', usePresetForPromotions);
+
+    // Preset card click handler
+    presetCards.addEventListener('click', (e) => {
+        const presetCard = e.target.closest('.preset-card:not(.create-preset-card)');
+        if (presetCard && !e.target.closest('.preset-action-btn')) {
+            const index = parseInt(presetCard.dataset.presetIndex);
+            togglePresetSelection(index);
+        }
+
+        // Handle action buttons
+        if (e.target.closest('.preset-action-btn.edit')) {
+            const index = parseInt(e.target.closest('.preset-action-btn').dataset.presetIndex);
+            editPreset(index);
+        }
+
+        if (e.target.closest('.preset-action-btn.delete')) {
+            const index = parseInt(e.target.closest('.preset-action-btn').dataset.presetIndex);
+            deletePreset(index);
+        }
+    });
+
+    // Card selection for preset
+    cardsContainer.addEventListener('change', (e) => {
+        if (e.target.classList.contains('preset-checkbox')) {
+            const cardId = parseInt(e.target.dataset.cardId);
+            if (e.target.checked) {
+                if (!selectedCardsForPreset.includes(cardId)) {
+                    selectedCardsForPreset.push(cardId);
+                }
+            } else {
+                selectedCardsForPreset = selectedCardsForPreset.filter(id => id !== cardId);
+            }
+            updateSelectedCount();
+            updateSelectedCardsPreview();
+        }
+    });
+
+    // Card click for preset selection
+    cardsContainer.addEventListener('click', (e) => {
+        if (isPresetMode && e.target.closest('.card-item')) {
+            const cardItem = e.target.closest('.card-item');
+            if (!e.target.closest('.toggle-switch')) {
+                const checkbox = cardItem.querySelector('.preset-checkbox');
+                checkbox.checked = !checkbox.checked;
+                checkbox.dispatchEvent(new Event('change'));
+            }
+        }
+    });
+
     // Handle toggle switches
     document.querySelectorAll('.toggle-switch input').forEach(toggle => {
         toggle.addEventListener('change', function() {
@@ -468,14 +1081,12 @@ document.addEventListener('DOMContentLoaded', function() {
             const cardInfo = cardData.find(card => card.id === cardId);
             
             if (this.checked) {
-                // Add to owned cards
                 cardElement.classList.remove('not-owned');
                 cardElement.classList.add('owned');
                 if (!ownedCards.find(card => card.id === cardId)) {
                     ownedCards.push(cardInfo);
                 }
             } else {
-                // Remove from owned cards
                 cardElement.classList.remove('owned');
                 cardElement.classList.add('not-owned');
                 ownedCards = ownedCards.filter(card => card.id !== cardId);
@@ -484,19 +1095,17 @@ document.addEventListener('DOMContentLoaded', function() {
             updateStats();
         });
     });
-    
+
     // Filter functionality
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
             
-            // Update active filter button
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             
             const filter = this.dataset.filter;
             
-            // Show/hide cards based on filter
             document.querySelectorAll('.card-item').forEach(card => {
                 const cardType = card.dataset.type;
                 const isOwned = card.classList.contains('owned');
@@ -509,19 +1118,23 @@ document.addEventListener('DOMContentLoaded', function() {
                     shouldShow = cardType === filter;
                 }
                 
-                // Also show/hide parent bank section if no cards are visible
                 const bankSection = card.closest('.bank-section');
                 card.style.display = shouldShow ? '' : 'none';
                 
-                // Check if bank section has any visible cards
                 const visibleCards = bankSection.querySelectorAll('.card-item:not([style*="display: none"])');
                 bankSection.style.display = visibleCards.length > 0 ? '' : 'none';
             });
         });
     });
-    
-    // Initialize stats
-    updateStats();
+
+    // Modal reset handlers
+    document.getElementById('presetModal').addEventListener('hidden.bs.modal', () => {
+        document.getElementById('presetForm').reset();
+        updateSelectedCardsPreview();
+        if (isPresetMode && selectedCardsForPreset.length === 0) {
+            exitPresetMode();
+        }
+    });
 });
 </script>
 @endsection 

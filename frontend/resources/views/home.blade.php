@@ -668,133 +668,67 @@
 
 @section('content')
     <!-- Hero Section -->
-    <section class="hero fade-in">
+    <section class="hero">
         <div class="container">
             <div class="hero-content">
                 <div class="hero-text">
-                    <h1>Maksimalkan Kartu <span class="text-gradient">dengan AI Cerdas</span></h1>
-                    <p>Platform AI yang mengoptimalkan penggunaan kartu kredit untuk maksimalkan reward, mengatur anggaran dan transaksi dengan smart automation yang sesuai gaya hidup Anda.</p>
-                    <a href="{{ route('login') }}" class="btn btn-primary">Mulai Sekarang</a>
+                    <h1>Maksimalkan <span class="text-gradient">Kartu</span> dengan <span class="text-gradient">AI Cerdas</span></h1>
+                    <p>Mileage membantu Anda memilih kartu kredit terbaik, mengoptimalkan reward, dan mengelola pengeluaran dengan analisis AI. Dapatkan lebih banyak dari setiap transaksi!</p>
+                    <div class="d-flex gap-3">
+                        <a href="{{ route('register') }}" class="btn btn-primary">Mulai Gratis Sekarang</a>
+                        <a href="#features" class="btn btn-outline">Pelajari Lebih Lanjut</a>
+                    </div>
                 </div>
-                
-                <div class="phone-mockup">
-                    <div class="phone-frame">
-                        <div class="phone-screen">
-                            <!-- Credit Card Slider -->
-                            <div class="credit-card-slider">
-                                <div class="card-slide active">
-                                    <div class="credit-card-mockup card-jcb">
-                                        <div>
-                                            <div class="card-chip"></div>
-                                            <div class="card-number">3569 **** **** 0001</div>
-                                        </div>
-                                        <div class="card-info">
-                                            <div>
-                                                <div class="card-holder">JOHN SMITH</div>
-                                                <div class="card-expiry">12/26</div>
+                <div class="hero-visual">
+                    <div class="phone-mockup modern-iphone">
+                        <div class="phone-frame">
+                            <div class="phone-screen">
+                                <div class="iphone-notch"></div>
+                                <div class="iphone-island"></div>
+                                <div class="card-stack-slider">
+                                    <div class="card-slide-item card-amex" style="transform: translate(-50%, -50%) scale(1) translateZ(0px) translateY(0px) rotateX(0deg);">
+                                        <div class="card-content">
+                                            <div class="card-logo">AMEX</div>
+                                            <div class="card-chip-icon"></div>
+                                            <div class="card-number-mockup">3777 123456 78910</div>
+                                            <div class="card-details-mockup">
+                                                <span>JOHN DOE</span>
+                                                <span>12/28</span>
                                             </div>
-                                            <div class="card-brand">JCB</div>
                                         </div>
                                     </div>
-                                </div>
-                                
-                                <div class="card-slide">
-                                    <div class="credit-card-mockup card-visa-infinite">
-                                        <div>
-                                            <div class="card-chip"></div>
-                                            <div class="card-number">4532 **** **** 1234</div>
-                                        </div>
-                                        <div class="card-info">
-                                            <div>
-                                                <div class="card-holder">JOHN SMITH</div>
-                                                <div class="card-expiry">12/26</div>
+                                    <div class="card-slide-item card-jcb" style="transform: translate(-50%, -50%) scale(0.9) translateZ(-40px) translateY(30px) rotateX(5deg);">
+                                        <div class="card-content">
+                                            <div class="card-logo">JCB</div>
+                                            <div class="card-chip-icon"></div>
+                                            <div class="card-number-mockup">3563 **** **** 9012</div>
+                                            <div class="card-details-mockup">
+                                                <span>JANE ROE</span>
+                                                <span>08/27</span>
                                             </div>
-                                            <div class="card-brand">VISA</div>
                                         </div>
                                     </div>
-                                </div>
-                                
-                                <div class="card-slide">
-                                    <div class="credit-card-mockup card-mastercard-world">
-                                        <div>
-                                            <div class="card-chip"></div>
-                                            <div class="card-number">5555 **** **** 4444</div>
-                                        </div>
-                                        <div class="card-info">
-                                            <div>
-                                                <div class="card-holder">JOHN SMITH</div>
-                                                <div class="card-expiry">12/26</div>
+                                    <div class="card-slide-item card-visa" style="transform: translate(-50%, -50%) scale(0.8) translateZ(-80px) translateY(60px) rotateX(10deg);">
+                                        <div class="card-content">
+                                            <div class="card-logo">VISA</div>
+                                            <div class="card-chip-icon"></div>
+                                            <div class="card-number-mockup">4532 **** **** 1234</div>
+                                            <div class="card-details-mockup">
+                                                <span>ALICE SMITH</span>
+                                                <span>03/29</span>
                                             </div>
-                                            <div class="card-brand">MC</div>
                                         </div>
                                     </div>
-                                </div>
-                                
-                                <div class="card-slide">
-                                    <div class="credit-card-mockup card-unionpay">
-                                        <div>
-                                            <div class="card-chip"></div>
-                                            <div class="card-number">6222 **** **** 0009</div>
-                                        </div>
-                                        <div class="card-info">
-                                            <div>
-                                                <div class="card-holder">JOHN SMITH</div>
-                                                <div class="card-expiry">12/26</div>
+                                     <div class="card-slide-item card-mastercard" style="transform: translate(-50%, -50%) scale(0.7) translateZ(-120px) translateY(90px) rotateX(15deg);">
+                                        <div class="card-content">
+                                            <div class="card-logo">Mastercard</div>
+                                            <div class="card-chip-icon"></div>
+                                            <div class="card-number-mockup">5432 **** **** 5678</div>
+                                            <div class="card-details-mockup">
+                                                <span>BOB BROWN</span>
+                                                <span>11/26</span>
                                             </div>
-                                            <div class="card-brand">UP</div>
                                         </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="card-slide">
-                                    <div class="credit-card-mockup card-amex-platinum">
-                                        <div>
-                                            <div class="card-chip"></div>
-                                            <div class="card-number">3782 **** **** 0005</div>
-                                        </div>
-                                        <div class="card-info">
-                                            <div>
-                                                <div class="card-holder">JOHN SMITH</div>
-                                                <div class="card-expiry">12/26</div>
-                                            </div>
-                                            <div class="card-brand">AMEX</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Slider Indicators -->
-                            <div class="slider-indicators">
-                                <div class="slider-dot active" data-slide="0"></div>
-                                <div class="slider-dot" data-slide="1"></div>
-                                <div class="slider-dot" data-slide="2"></div>
-                                <div class="slider-dot" data-slide="3"></div>
-                                <div class="slider-dot" data-slide="4"></div>
-                            </div>
-                            
-                            <!-- App UI -->
-                            <div class="app-ui">
-                                <div class="balance-info">
-                                    <div class="balance-amount">Rp 15,247,350</div>
-                                    <div class="balance-label">Available Credit Limit</div>
-                                </div>
-                                
-                                <div class="quick-actions">
-                                    <div class="action-btn">
-                                        <i class="bi bi-graph-up"></i>
-                                        <div style="margin-top: 5px;">Analytics</div>
-                                    </div>
-                                    <div class="action-btn">
-                                        <i class="bi bi-credit-card"></i>
-                                        <div style="margin-top: 5px;">Pay Bill</div>
-                                    </div>
-                                    <div class="action-btn">
-                                        <i class="bi bi-arrow-up-right"></i>
-                                        <div style="margin-top: 5px;">Transfer</div>
-                                    </div>
-                                    <div class="action-btn">
-                                        <i class="bi bi-gift"></i>
-                                        <div style="margin-top: 5px;">Rewards</div>
                                     </div>
                                 </div>
                             </div>
@@ -1165,8 +1099,6 @@
         </div>
     </section>
 
-    
-
     <!-- Promotions Section -->
     <section class="promotions section fade-in">
         <div class="container">
@@ -1334,73 +1266,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Footer -->
-    <footer class="fade-in">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section company-info">
-                    <h3>Mileage</h3>
-                    <p>Platform AI terdepan untuk optimasi kartu kredit dan manajemen keuangan personal. Maksimalkan reward dan kelola spending dengan cerdas.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="bi bi-facebook"></i></a>
-                        <a href="#"><i class="bi bi-twitter"></i></a>
-                        <a href="#"><i class="bi bi-instagram"></i></a>
-                        <a href="#"><i class="bi bi-linkedin"></i></a>
-                        <a href="#"><i class="bi bi-youtube"></i></a>
-                    </div>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Produk</h3>
-                    <ul>
-                        <li><a href="#features">Fitur Utama</a></li>
-                        <li><a href="#cards">Kartu Kredit</a></li>
-                        <li><a href="#pricing">Paket Harga</a></li>
-                        <li><a href="#">Mobile App</a></li>
-                        <li><a href="#">API Integration</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Perusahaan</h3>
-                    <ul>
-                        <li><a href="#">Tentang Kami</a></li>
-                        <li><a href="#">Karir</a></li>
-                        <li><a href="#">Press Kit</a></li>
-                        <li><a href="#">Partner</a></li>
-                        <li><a href="#">Investor</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Dukungan</h3>
-                    <ul>
-                        <li><a href="#">Help Center</a></li>
-                        <li><a href="#">Kontak Support</a></li>
-                        <li><a href="#blog">Blog</a></li>
-                        <li><a href="#">FAQ</a></li>
-                        <li><a href="#">Community</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Legal</h3>
-                    <ul>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                        <li><a href="#">Cookie Policy</a></li>
-                        <li><a href="#">Security</a></li>
-                        <li><a href="#">Compliance</a></li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; {{ date('Y') }} Mileage. All rights reserved. Made with ❤️ in Indonesia.</p>
-            </div>
-        </div>
-    </footer>
 @endsection
 
 @section('scripts')
@@ -1429,47 +1294,80 @@
             });
         }
         
-        // Credit Card Slider Functionality
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.card-slide');
-        const dots = document.querySelectorAll('.slider-dot');
-        const totalSlides = slides.length;
-        
-        function showSlide(index) {
-            // Remove active class from all slides and dots
-            slides.forEach(slide => {
-                slide.classList.remove('active', 'prev');
+        // Card Stack Slider Functionality
+        const sliderContainer = document.querySelector('.card-stack-slider');
+        const slides = Array.from(sliderContainer.querySelectorAll('.card-slide-item'));
+        let currentIndex = 0;
+        let autoSlideInterval;
+
+        function updateSlider(animate = true) {
+            slides.forEach((slide, index) => {
+                let offset = index - currentIndex;
+                // For circular behavior: if a card is "behind" the current (negative offset),
+                // treat it as if it's at the end of the stack.
+                if (offset < 0) {
+                    offset += slides.length;
+                }
+
+                let newTransform;
+                let newOpacity = 1;
+
+                if (offset === 0) { // Current card
+                    newTransform = `translate(-50%, -50%) scale(1) translateZ(0px) translateY(0px) rotateX(0deg)`;
+                } else { // Cards in the stack behind or looping around
+                    const scale = Math.max(0.5, 1 - offset * 0.08); // Adjusted scaling factor
+                    const translateZ = -35 * offset; // Adjusted Z translation
+                    const translateY = 25 * offset; // Adjusted Y translation
+                    const rotateX = Math.min(25, 8 * offset); // Adjusted X rotation
+                    newTransform = `translate(-50%, -50%) scale(${scale}) translateZ(${translateZ}px) translateY(${translateY}px) rotateX(${rotateX}deg)`;
+                    if (offset > 3) newOpacity = 0; // Hide cards too far back (e.g., more than 3 cards behind)
+                }
+                
+                slide.style.transform = newTransform;
+                slide.style.opacity = newOpacity;
+                // Adjust z-index so current card is on top, then cards behind it in order.
+                // Cards that have looped from front to back should be at the bottom of the visual stack.
+                slide.style.zIndex = slides.length - offset;
+                slide.style.transition = animate ? 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease' : 'none';
             });
-            dots.forEach(dot => {
-                dot.classList.remove('active');
-            });
-            
-            // Add active class to current slide and dot
-            slides[index].classList.add('active');
-            dots[index].classList.add('active');
-            
-            // Add prev class to previous slide
-            if (index > 0) {
-                slides[index - 1].classList.add('prev');
-            }
-            
-            currentSlide = index;
         }
-        
-        function nextSlide() {
-            const next = (currentSlide + 1) % totalSlides;
-            showSlide(next);
+
+        function nextCard() {
+            currentIndex = (currentIndex + 1) % slides.length;
+            updateSlider();
         }
-        
-        // Auto slide functionality
-        setInterval(nextSlide, 3000);
-        
-        // Dot click functionality
-        dots.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
-                showSlide(index);
+
+        function prevCard() {
+            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+            updateSlider();
+        }
+
+        function startAutoSlide() {
+            stopAutoSlide(); // Clear existing interval
+            autoSlideInterval = setInterval(nextCard, 3000);
+        }
+
+        function stopAutoSlide() {
+            clearInterval(autoSlideInterval);
+        }
+
+        // Click to bring card to front
+        slides.forEach((slide, index) => {
+            slide.addEventListener('click', () => {
+                if (index !== currentIndex) {
+                    currentIndex = index;
+                    updateSlider();
+                    startAutoSlide(); // Restart auto-slide on manual interaction
+                }
             });
         });
+        
+        sliderContainer.addEventListener('mouseenter', stopAutoSlide);
+        sliderContainer.addEventListener('mouseleave', startAutoSlide);
+
+        // Initialize slider
+        updateSlider(false); // Initial setup without animation
+        startAutoSlide();
         
         // Promo Filter Functionality
         const filterBtns = document.querySelectorAll('.filter-btn');
