@@ -658,16 +658,34 @@
                             <a class="nav-link" href="{{ route('mydeck') }}">My Deck</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('transactions') }}">Transaksi</a>
+                            <a class="nav-link" href="{{ route('transactions') }}">Transactions</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('privileges') }}">Privileges</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('challenges') }}">Challenge</a>
+                            <a class="nav-link" href="{{ route('challenges') }}">Challenges</a>
+                        </li>
+                        <li class="nav-item dropdown position-relative">
+                            <a class="nav-link dropdown-toggle" href="#" id="kontenDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Contents
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="kontenDropdown">
+                                <li><a class="dropdown-item" href="{{ url('blog') }}"><i class="bi bi-journal-text"></i>Blog</a></li>
+                                <li><a class="dropdown-item" href="{{ url('promotions') }}"><i class="bi bi-gift"></i>Promotion</a></li>
+                                <li><a class="dropdown-item" href="{{ url('tips') }}"><i class="bi bi-lightbulb"></i>Tips</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown position-relative">
+                            <a class="nav-link dropdown-toggle" href="#" id="toolsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Tools
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="toolsDropdown">
+                                <li><a class="dropdown-item" href="{{ url('calculator') }}"><i class="bi bi-calculator"></i> Calculator</a></li>
+                                <li><a class="dropdown-item" href="{{ url('ticketquery') }}"><i class="bi bi-ticket-perforated"></i> Ticket Query</a></li>
+                            </ul>
                         </li>
                         @else
-                       
                         <li class="nav-item">
                             <a class="nav-link" href="{{url('')}}#features-section">Fitur</a>
                         </li>
@@ -677,18 +695,19 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('apply-card') }}">Ajukan</a>
                         </li>
-                        @endauth
-                        
                         <li class="nav-item dropdown position-relative">
                             <a class="nav-link dropdown-toggle" href="#" id="kontenDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Konten <i class="bi bi-chevron-down ms-1"></i>
+                                Konten
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="kontenDropdown">
-                                <li><a class="dropdown-item" href="{{ url('promotions') }}"><i class="bi bi-gift"></i>Promosi</a></li>
                                 <li><a class="dropdown-item" href="{{ url('blog') }}"><i class="bi bi-journal-text"></i>Blog</a></li>
+                                <li><a class="dropdown-item" href="{{ url('promotions') }}"><i class="bi bi-gift"></i>Promosi</a></li>
                                 <li><a class="dropdown-item" href="{{ url('tips') }}"><i class="bi bi-lightbulb"></i>Tips</a></li>
                             </ul>
                         </li>
+                        @endauth
+                        
+                        
                     </ul>
                     
                     <div class="d-flex align-items-center gap-2">
@@ -942,51 +961,59 @@
                 });
             });
 
-            // Enhanced dropdown animation for Konten menu
-            const kontenDropdown = document.getElementById('kontenDropdown');
-            const kontenDropdownMenu = kontenDropdown.nextElementSibling;
-            
-            let hoverTimeout;
-            
-            kontenDropdown.parentElement.addEventListener('mouseenter', function() {
-                clearTimeout(hoverTimeout);
-                kontenDropdownMenu.classList.add('show');
+            document.querySelectorAll('.nav-item.dropdown').forEach(dropdown => {
+                const toggle = dropdown.querySelector('.dropdown-toggle');
+                const menu = dropdown.querySelector('.dropdown-menu');
+                let hoverTimeout;
+
+                dropdown.addEventListener('mouseenter', function () {
+                    clearTimeout(hoverTimeout);
+                    menu.classList.add('show');
+                    toggle.setAttribute('aria-expanded', 'true');
+                });
+
+                dropdown.addEventListener('mouseleave', function () {
+                    hoverTimeout = setTimeout(() => {
+                        menu.classList.remove('show');
+                        toggle.setAttribute('aria-expanded', 'false');
+                    }, 150);
+                });
             });
-            
-            kontenDropdown.parentElement.addEventListener('mouseleave', function() {
-                hoverTimeout = setTimeout(() => {
-                    kontenDropdownMenu.classList.remove('show');
-                }, 150);
-            });
 
-            // User dropdown click handler
-            const userDropdownBtn = document.getElementById('userDropdown');
-            if (userDropdownBtn) {
-                // Bootstrap's data-bs-toggle="dropdown" attribute handles the toggling.
-                // The main requirement is to ensure the dropdown closes when clicking outside.
-                
-                // No explicit click handler needed on userDropdownBtn for toggling,
-                // as data-bs-toggle="dropdown" should manage this.
+            document.addEventListener("DOMContentLoaded", function () {
+                const userDropdownBtn = document.getElementById('userDropdown');
+                const userDropdownContainer = userDropdownBtn.closest('.dropdown');
+                const userDropdownMenu = userDropdownContainer.querySelector('.dropdown-menu');
 
-                // Close dropdown when clicking outside (Bootstrap usually handles this, but being explicit can be safer)
-                document.addEventListener('click', function(e) {
-                    const userDropdownContainer = userDropdownBtn.closest('.user-dropdown'); // More robust way to get container
-                    const userDropdownMenu = userDropdownContainer ? userDropdownContainer.querySelector('.dropdown-menu') : null;
+                let hoverTimeout;
 
-                    if (userDropdownMenu && userDropdownMenu.classList.contains('show')) {
-                        // Check if the click was outside the dropdown button AND outside the dropdown menu
-                        if (!userDropdownBtn.contains(e.target) && !userDropdownMenu.contains(e.target)) {
-                            // Use Bootstrap's API to hide if available, otherwise toggle class
-                            var dropdownInstance = bootstrap.Dropdown.getInstance(userDropdownBtn);
-                            if (dropdownInstance) {
-                                dropdownInstance.hide();
-                            } else {
-                                userDropdownMenu.classList.remove('show');
-                            }
-                        }
+                if (!userDropdownBtn || !userDropdownContainer || !userDropdownMenu) return;
+
+                // Hover buka dropdown
+                userDropdownContainer.addEventListener('mouseenter', () => {
+                    clearTimeout(hoverTimeout);
+                    const dropdown = bootstrap.Dropdown.getOrCreateInstance(userDropdownBtn);
+                    dropdown.show();
+                });
+
+                // Hover keluar tutup dropdown
+                userDropdownContainer.addEventListener('mouseleave', () => {
+                    hoverTimeout = setTimeout(() => {
+                        const dropdown = bootstrap.Dropdown.getOrCreateInstance(userDropdownBtn);
+                        dropdown.hide();
+                    }, 200);
+                });
+
+                // Klik di luar untuk menutup dropdown
+                document.addEventListener('click', function (e) {
+                    const isInside = userDropdownContainer.contains(e.target);
+                    const dropdown = bootstrap.Dropdown.getOrCreateInstance(userDropdownBtn);
+
+                    if (!isInside && userDropdownMenu.classList.contains('show')) {
+                        dropdown.hide();
                     }
                 });
-            }
+            });
 
             // Smooth scrolling for anchor links
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {

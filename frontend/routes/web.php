@@ -56,3 +56,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/status', [SubscriptionController::class, 'status'])->name('status');
     });
 });
+
+// Promo and Blog Detail Demo Routes
+Route::get('/promo/{id}', function($id) {
+    return view('contents.promotion-detail');
+});
+Route::get('/blog/{id}', function($id) {
+    return view('contents.blog-detail');
+});

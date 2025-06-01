@@ -383,50 +383,6 @@
 @section('content')
 <div class="container content-wrapper-padding">
     <!-- Welcome Header -->
-    <div class="welcome-header animate-fade-in">
-        <h1>Selamat Datang, {{ $user->name }}! 👋</h1>
-        <p>Mari kelola keuangan dan maksimalkan rewards dari kartu kredit Anda</p>
-        
-        <!-- Quick Actions -->
-        <div class="quick-actions">
-            <a href="{{ route('mydeck') }}" class="quick-action-btn">
-                <div class="quick-action-icon">
-                    <i class="bi bi-credit-card"></i>
-                </div>
-                <div>
-                    <h6 class="mb-1">My Cards</h6>
-                    <p class="mb-0 small">Kelola kartu kredit</p>
-                </div>
-            </a>
-            <a href="{{ route('transactions') }}" class="quick-action-btn">
-                <div class="quick-action-icon">
-                    <i class="bi bi-list-ul"></i>
-                </div>
-                <div>
-                    <h6 class="mb-1">Transactions</h6>
-                    <p class="mb-0 small">Lihat transaksi</p>
-                </div>
-            </a>
-            <a href="{{ route('apply-card') }}" class="quick-action-btn">
-                <div class="quick-action-icon">
-                    <i class="bi bi-plus-circle"></i>
-                </div>
-                <div>
-                    <h6 class="mb-1">Apply Card</h6>
-                    <p class="mb-0 small">Ajukan kartu baru</p>
-                </div>
-            </a>
-            <a href="{{ route('privileges') }}" class="quick-action-btn">
-                <div class="quick-action-icon">
-                    <i class="bi bi-award"></i>
-                </div>
-                <div>
-                    <h6 class="mb-1">Privileges</h6>
-                    <p class="mb-0 small">Lihat benefits</p>
-                </div>
-            </a>
-        </div>
-    </div>
 
     <!-- Stats Cards -->
     <div class="dashboard-grid">
@@ -437,23 +393,30 @@
             <div class="stats-value" data-countup-value="{{ $dashboardData['totalMiles'] }}">0</div>
             <div class="stats-label">Total Miles</div>
         </div>
+        <div class="stats-card animate-slide-up">
+            <div class="stats-icon primary">
+                <i class="bi bi-airplane"></i>
+            </div>
+            <div class="stats-value" data-countup-value="{{ $dashboardData['totalMiles'] }}">0</div>
+            <div class="stats-label">Expiring Miles</div>
+        </div>
         
         <div class="stats-card animate-slide-up">
             <div class="stats-icon warning">
                 <i class="bi bi-credit-card"></i>
             </div>
-            <div class="stats-value">Rp <span data-countup-value="{{ $dashboardData['spendLimit'] }}">0</span>K</div>
-            <div class="stats-label">Spend Limit</div>
+            <div class="stats-value"><span data-countup-value="3">0</span>/5</div>
+            <div class="stats-label">Active Cards</div>
         </div>
-        
+
         <div class="stats-card animate-slide-up">
-            <div class="stats-icon success">
-                <i class="bi bi-graph-up"></i>
+            <div class="stats-icon warning">
+                <i class="bi bi-credit-card"></i>
             </div>
-            <div class="stats-value">{{ $dashboardData['weeklySpend'] }}/7</div>
-            <div class="stats-label">Weekly Spend</div>
+            <div class="stats-value"><span data-countup-value="3">0</span>/5</div>
+            <div class="stats-label">Ongoing Challenges</div>
         </div>
-        
+
         <div class="stats-card animate-slide-up">
             <div class="stats-icon info">
                 <i class="bi bi-wallet2"></i>
@@ -461,6 +424,8 @@
             <div class="stats-value">Rp <span data-countup-value="{{ $dashboardData['totalSpend'] / 1000000 }}">0</span>M</div>
             <div class="stats-label">Total Spend</div>
         </div>
+
+        
     </div>
 
     <!-- Main Dashboard Content -->
