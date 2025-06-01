@@ -669,10 +669,10 @@
                         @else
                        
                         <li class="nav-item">
-                            <a class="nav-link" href="#features">Fitur</a>
+                            <a class="nav-link" href="{{url('')}}#features-section">Fitur</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{url('')}}#pricing">Paket</a>
+                            <a class="nav-link" href="{{url('')}}#pricing-section">Paket</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('apply-card') }}">Ajukan</a>

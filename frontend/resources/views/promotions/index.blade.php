@@ -436,6 +436,196 @@
         border-radius: 8px;
         color: var(--text-secondary);
     }
+
+    /* General Styles */
+    :root {
+        /* Existing styles */
+    }
+
+    .filter-sidebar {
+        background: var(--card-color);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 20px var(--shadow);
+        position: sticky; /* Makes sidebar sticky */
+        top: 100px; /* Adjust based on navbar height */
+        height: calc(100vh - 120px); /* Adjust based on navbar and some padding */
+        overflow-y: auto; /* Allows scrolling within sidebar if content overflows */
+    }
+
+    .filter-section {
+        margin-bottom: 1.75rem;
+        padding-bottom: 1.25rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+    .filter-section:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+    .filter-section h5 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .filter-section h5 i {
+        font-size: 1.1rem;
+    }
+
+    .form-check-label {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+    }
+    .form-check-input:checked {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+    .form-check-input:focus {
+        box-shadow: 0 0 0 0.2rem rgba(63, 76, 255, 0.25);
+    }
+
+    /* Specific for search input */
+    .search-input-group {
+        position: relative;
+    }
+    #searchPromo {
+        padding-right: 3rem; /* Space for the button */
+        background-color: var(--surface-color);
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+    }
+    #searchPromo:focus {
+        background-color: var(--surface-color);
+        border-color: var(--primary-color);
+        color: var(--text-primary);
+    }
+    #searchBtn {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        border: none;
+        background: var(--primary-color);
+        color: white;
+        padding: 0 1rem;
+        border-top-right-radius: var(--bs-border-radius);
+        border-bottom-right-radius: var(--bs-border-radius);
+    }
+    #searchBtn:hover {
+        background: var(--secondary-color);
+    }
+
+    /* Select2 custom styling */
+    .select2-container--default .select2-selection--multiple {
+        background-color: var(--surface-color);
+        border: 1px solid var(--border-color);
+        border-radius: var(--bs-border-radius);
+        padding: 0.25rem;
+    }
+    .select2-container--default .select2-selection--multiple .select2-selection__choice {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        color: white;
+        border-radius: 4px;
+        padding: 2px 6px;
+    }
+    .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+        color: rgba(255,255,255,0.7);
+        margin-right: 3px;
+    }
+    .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+        color: white;
+    }
+    .select2-dropdown {
+        background-color: var(--card-color);
+        border: 1px solid var(--border-color);
+    }
+    .select2-results__option {
+        color: var(--text-secondary);
+    }
+    .select2-results__option--highlighted {
+        background-color: var(--primary-color) !important;
+        color: white !important;
+    }
+    .select2-search--dropdown .select2-search__field {
+        background-color: var(--surface-color);
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+    }
+
+    /* Discount Slider */
+    .discount-slider-section {
+        margin-top: 0.5rem;
+    }
+    #discountRange {
+        width: 100%;
+    }
+    #discountValue {
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+    .slider-labels {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        margin-top: 0.25rem;
+    }
+    /* Custom styling for range input */
+    input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 8px;
+        background: var(--border-color);
+        border-radius: 5px;
+        outline: none;
+        opacity: 0.7;
+        transition: opacity .2s;
+    }
+    input[type="range"]:hover {
+        opacity: 1;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        background: var(--primary-color);
+        border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    }
+    input[type="range"]::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        background: var(--primary-color);
+        border-radius: 50%;
+        cursor: pointer;
+        border: none; /* Important for Firefox */
+        box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    }
+
+    /* Preset Filter specific */
+    #presetFilterSection .form-check {
+        margin-bottom: 0.5rem;
+    }
+    #presetFilterSection .form-check-label {
+        font-weight: 500;
+    }
+    #noPresetsMessage {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        background: var(--surface-color);
+        padding: 0.75rem;
+        border-radius: 8px;
+        text-align: center;
+    }
 </style>
 @endsection
 
@@ -693,21 +883,25 @@ document.addEventListener('DOMContentLoaded', function () {
         @for ($i = 0; $i < 24; $i++)
         {
             id: {{$i}},
-            category: "{{ collect(['travel', 'dining', 'shopping', 'entertainment', 'fuel'])->random() }}",
-            cardType: "{{ collect(['visa', 'mastercard', 'amex', 'jcb'])->random() }}",
-            benefit: "{{ collect(['cashback', 'miles', 'discount', 'voucher'])->random() }}",
+            category: "{{ collect(['travel', 'dining', 'shopping', 'entertainment', 'fuel', 'groceries', 'health', 'education', 'bills', 'lifestyle'])->random() }}",
+            cardType: "{{ collect(['visa', 'mastercard', 'amex', 'jcb', 'unionpay', 'discover'])->random() }}",
+            benefit: "{{ collect(['discount', 'cashback', 'points', 'miles', 'voucher', 'free_item', 'bogo'])->random() }}",
             status: "{{ collect(['active', 'limited', 'new'])->random() }}",
-            minSpend: {{ collect([0, 100000, 500000, 1000000, 2000000])->random() }},
-            date: "{{ date('Y-m-d', strtotime('+'.rand(-30, 90).' days')) }}", // For sorting by newest/ending soon
+            minSpend: {{ collect([0, 50000, 100000, 250000, 500000, 1000000, 1500000, 2000000])->random() }},
+            date: "{{ date('Y-m-d', strtotime('+'.rand(-60, 60).' days')) }}",
             popularity: {{ rand(1,100) }},
-            title: "Promo {{ ucfirst(collect(['travel', 'dining', 'shopping', 'cashback', 'rewards'])->random()) }} #{{ $i + 1 }} - Nikmati Keuntungan Tiada Henti",
-            description: "Dapatkan keuntungan maksimal dengan promo eksklusif ini. Syarat dan ketentuan berlaku untuk semua transaksi yang memenuhi kriteria.",
-            imageIcon: "bi-tag-fill", // Placeholder, ideally unique per promo
-            badge: "{{ collect(['HOT', 'BARU', 'TERBATAS', 'EKSKLUSIF'])->random() }}",
-            expiryDate: "{{ date('d M Y', strtotime('+'.rand(7, 120).' days')) }}",
+            title: "{{ Illuminate\Support\Str::title(fake()->words(rand(3,6), true)) }} #{{ $i + 1 }}",
+            description: "{{ fake()->sentence(rand(15,25)) }}",
+            imageIcon: "{{ collect(['bi-tag-fill', 'bi-gift-fill', 'bi-star-fill', 'bi-airplane-fill', 'bi-cart-fill', 'bi-cup-straw'])->random() }}",
+            badge: "{{ collect(['HOT', 'BARU', 'TERBATAS', 'EKSKLUSIF', 'ONLINE ONLY'])->random() }}",
+            expiryDate: "{{ date('d M Y', strtotime('+'.rand(7, 180).' days')) }}",
+            discount_percentage: {{ collect([null, 5, 10, 15, 20, 25, 30, 40, 50, 60, 70])->random() }},
+            locations: ["{{ collect(['jakarta', 'surabaya', 'bandung', 'medan', 'semarang', 'online', 'nasional', 'bali', 'yogyakarta', 'makassar', 'semua-kota'])->random() }}", "{{ collect(['jakarta', 'surabaya', 'bandung', 'medan', 'online', 'nasional'])->random() }}"],
+            banks: ["{{ collect(['bca', 'mandiri', 'bni', 'bri', 'cimb-niaga', 'dbs', 'hsbc', 'uob', 'ocbc-nisp', 'maybank', 'citibank', 'semua-bank'])->random() }}", "{{ collect(['bca', 'mandiri', 'bni', 'semua-bank'])->random() }}"],
+            applicable_card_ids: @json(collect(range(1, 8))->random(rand(1,3))->toArray()),
             metaBadges: [
                 { type: 'primary', text: "{{ ucfirst(collect(['visa', 'mastercard', 'amex', 'jcb'])->random()) }}" },
-                { type: 'success', text: "{{ collect(['Cashback', 'Miles', 'Discount', 'Voucher'])->random() }}" },
+                { type: 'success', text: "{{ collect(['Diskon', 'Cashback', 'Poin', 'Miles', 'Voucher'])->random() }} {{ collect([null, '10%', '15%', 'Rp 50rb', '2x'])->random() }}" },
                 @if(rand(0,1))
                 { type: 'warning', text: "Min Rp {{ number_format(collect([100000, 250000, 500000, 1000000])->random()) }}" }
                 @endif
@@ -737,12 +931,38 @@ document.addEventListener('DOMContentLoaded', function () {
         cardTypes: [],
         benefits: [],
         minSpend: '',
-        status: []
+        status: [],
+        banks: [],
+        locations: [],
+        discountMin: 0,
+        presetCardIds: []
     };
     let currentSort = 'newest';
     let currentPage = 1;
     const itemsPerPage = 9; // Adjusted for 3x3 grid
     let currentView = 'grid';
+
+    // Initialize Select2
+    $('.select2-multiple').select2({
+        theme: 'bootstrap-5', // Optional: use Bootstrap 5 themeing
+        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        placeholder: $(this).data('placeholder'),
+        closeOnSelect: false, // Keep dropdown open for multiple selections
+        allowClear: true
+    });
+    
+    // Discount Slider
+    const discountRange = document.getElementById('discountRange');
+    const discountValue = document.getElementById('discountValue');
+    
+    discountRange.addEventListener('input', function() {
+        discountValue.textContent = this.value + '%';
+        // applyFiltersAndSort(); // Apply filter on slider change if desired
+    });
+    discountRange.addEventListener('change', function() { // Apply filter when user releases slider
+        currentFilters.discountMin = parseInt(this.value);
+        debouncedApplyFilters();
+    });
 
     // Debounce function
     function debounce(func, delay) {
@@ -763,8 +983,13 @@ document.addEventListener('DOMContentLoaded', function () {
             const cardTypeMatch = currentFilters.cardTypes.length === 0 || currentFilters.cardTypes.includes(promo.cardType);
             const benefitMatch = currentFilters.benefits.length === 0 || currentFilters.benefits.includes(promo.benefit);
             const minSpendMatch = !currentFilters.minSpend || promo.minSpend >= parseInt(currentFilters.minSpend);
-            const statusMatch = currentFilters.statuses.length === 0 || currentFilters.statuses.includes(promo.status);
-            return searchMatch && categoryMatch && cardTypeMatch && benefitMatch && minSpendMatch && statusMatch;
+            const statusMatch = currentFilters.status.length === 0 || currentFilters.status.includes(promo.status);
+            const bankMatch = currentFilters.banks.length === 0 || currentFilters.banks.some(b => promo.banks.includes(b));
+            const locationMatch = currentFilters.locations.length === 0 || currentFilters.locations.some(loc => promo.locations.includes(loc));
+            const discountMatch = promo.discount_percentage === undefined || promo.discount_percentage >= currentFilters.discountMin;
+            const presetMatch = currentFilters.presetCardIds.length === 0 || currentFilters.presetCardIds.some(cardId => promo.applicable_card_ids && promo.applicable_card_ids.includes(cardId));
+
+            return searchMatch && categoryMatch && cardTypeMatch && benefitMatch && minSpendMatch && statusMatch && bankMatch && locationMatch && discountMatch && presetMatch;
         });
 
         // Sorting logic
@@ -783,6 +1008,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 break;
             case 'highest-value': // Example: sort by minSpend desc, then popularity
                 filteredPromos.sort((a, b) => b.minSpend - a.minSpend || b.popularity - a.popularity);
+                break;
+            case 'min-spend-asc':
+                filteredPromos.sort((a, b) => a.minSpend - b.minSpend);
+                break;
+            case 'min-spend-desc':
+                filteredPromos.sort((a, b) => b.minSpend - a.minSpend);
+                break;
+            case 'discount-desc': // Added for discount slider
+                filteredPromos.sort((a, b) => (b.discount_percentage || 0) - (a.discount_percentage || 0));
                 break;
         }
         
@@ -934,8 +1168,9 @@ document.addEventListener('DOMContentLoaded', function () {
         currentFilters.categories = Array.from(document.querySelectorAll('input[id^="cat-"]:checked')).map(cb => cb.value);
         currentFilters.cardTypes = Array.from(document.querySelectorAll('input[id^="card-"]:checked')).map(cb => cb.value);
         currentFilters.benefits = Array.from(document.querySelectorAll('input[id^="benefit-"]:checked')).map(cb => cb.value);
-        currentFilters.statuses = Array.from(document.querySelectorAll('input[id^="status-"]:checked')).map(cb => cb.value);
+        currentFilters.status = Array.from(document.querySelectorAll('input[id^="status-"]:checked')).map(cb => cb.value);
         currentFilters.minSpend = document.getElementById('minSpendFilter').value;
+        currentFilters.discountMin = parseInt(discountRange.value);
         currentPage = 1; // Reset to first page when filters change
     }
 
@@ -945,7 +1180,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('sortSelect').value = 'newest';
         document.getElementById('minSpendFilter').value = '';
         
-        currentFilters = { search: '', categories: [], cardTypes: [], benefits: [], minSpend: '', status: [] };
+        currentFilters = { search: '', categories: [], cardTypes: [], benefits: [], minSpend: '', status: [], banks: [], locations: [], discountMin: 0, presetCardIds: [] };
         currentSort = 'newest';
         currentPage = 1;
         applyFiltersAndSort();
@@ -970,10 +1205,32 @@ document.addEventListener('DOMContentLoaded', function () {
         currentFilters.categories.forEach(val => addTag(val, 'categories', document.querySelector(`label[for="cat-${val}"]`).textContent));
         currentFilters.cardTypes.forEach(val => addTag(val, 'cardTypes', document.querySelector(`label[for="card-${val}"]`).textContent));
         currentFilters.benefits.forEach(val => addTag(val, 'benefits', document.querySelector(`label[for="benefit-${val}"]`).textContent));
-        currentFilters.statuses.forEach(val => addTag(val, 'statuses', document.querySelector(`label[for="status-${val}"]`).textContent));
+        currentFilters.status.forEach(val => addTag(val, 'status', document.querySelector(`label[for="status-${val}"]`).textContent));
         if (currentFilters.minSpend) {
             const minSpendText = document.getElementById('minSpendFilter').options[document.getElementById('minSpendFilter').selectedIndex].text;
             addTag(currentFilters.minSpend, 'minSpend', `Min Spend: ${minSpendText}`);
+        }
+        if (currentFilters.discountMin > 0) {
+            const tag = createFilterTag(`Diskon Min: ${currentFilters.discountMin}%`, 'discountMin');
+            activeFilterTagsContainer.appendChild(tag);
+        }
+        if (currentFilters.banks.length > 0) {
+            currentFilters.banks.forEach(bank => {
+                const bankName = $('#bankFilter option[value="' + bank + '"]').text();
+                const tag = createFilterTag(`Bank: ${bankName}`, 'banks', bank);
+                activeFilterTagsContainer.appendChild(tag);
+            });
+        }
+        if (currentFilters.locations.length > 0) {
+            currentFilters.locations.forEach(loc => {
+                const locName = $('#locationFilter option[value="' + loc + '"]').text();
+                const tag = createFilterTag(`Lokasi: ${locName}`, 'locations', loc);
+                activeFilterTagsContainer.appendChild(tag);
+            });
+        }
+        if (currentFilters.presetCardIds.length > 0) {
+            const tag = createFilterTag(`Preset: ${currentFilters.presetCardIds.map(id => $('#presetFilter input[value="' + id + '"]').next().text()).join(', ')}`, 'preset');
+            activeFilterTagsContainer.appendChild(tag);
         }
 
         activeFiltersContainer.style.display = hasActiveFilters ? 'block' : 'none';
@@ -996,7 +1253,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (type === 'categories') checkboxId = `cat-${value}`;
             else if (type === 'cardTypes') checkboxId = `card-${value}`;
             else if (type === 'benefits') checkboxId = `benefit-${value}`;
-            else if (type === 'statuses') checkboxId = `status-${value}`;
+            else if (type === 'status') checkboxId = `status-${value}`;
             if (checkboxId && document.getElementById(checkboxId)) {
                 document.getElementById(checkboxId).checked = false;
             }
@@ -1078,6 +1335,83 @@ document.addEventListener('DOMContentLoaded', function () {
     if (promoGrid) {
         mutationObserver.observe(promoGrid, { childList: true });
     }
+
+    // Preset Filtering Logic
+    const presetListContainer = document.getElementById('presetListContainer');
+    const noPresetsMessage = document.getElementById('noPresetsMessage');
+    const clearPresetFilterButton = document.getElementById('clearPresetFilter');
+    let cardPresets = JSON.parse(localStorage.getItem('cardPresets') || '[]');
+    let activePresetName = null;
+
+    function renderPresetsForFiltering() {
+        presetListContainer.innerHTML = ''; // Clear existing
+        if (cardPresets.length === 0) {
+            noPresetsMessage.style.display = 'block';
+            clearPresetFilterButton.style.display = 'none';
+            return;
+        }
+        noPresetsMessage.style.display = 'none';
+
+        cardPresets.forEach(preset => {
+            const div = document.createElement('div');
+            div.classList.add('form-check');
+            div.innerHTML = `
+                <input class="form-check-input" type="radio" name="presetFilter" id="preset-${preset.id}" value="${preset.id}">
+                <label class="form-check-label" for="preset-${preset.id}">
+                    ${preset.name} <small class="text-muted">(${preset.cards.length} kartu)</small>
+                </label>
+            `;
+            presetListContainer.appendChild(div);
+
+            const radio = div.querySelector('input[type="radio"]');
+            radio.addEventListener('change', function() {
+                if (this.checked) {
+                    const selectedPreset = cardPresets.find(p => p.id == this.value);
+                    currentFilters.presetCardIds = selectedPreset ? selectedPreset.cards : [];
+                    activePresetName = selectedPreset ? selectedPreset.name : null;
+                    clearPresetFilterButton.style.display = 'block';
+                } else { // Should not happen with radios in a group, but good practice
+                    currentFilters.presetCardIds = [];
+                    activePresetName = null;
+                }
+                debouncedApplyFilters();
+            });
+        });
+    }
+
+    clearPresetFilterButton.addEventListener('click', function() {
+        document.querySelectorAll('input[name="presetFilter"]').forEach(radio => radio.checked = false);
+        currentFilters.presetCardIds = [];
+        activePresetName = null;
+        this.style.display = 'none';
+        debouncedApplyFilters();
+    });
+
+    // Check for preset filter from URL (e.g., from My Deck page)
+    function applyPresetFromUrl() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const presetNameFromUrl = urlParams.get('preset');
+        if (presetNameFromUrl) {
+            const matchedPreset = cardPresets.find(p => p.name === decodeURIComponent(presetNameFromUrl));
+            if (matchedPreset) {
+                const presetRadio = document.getElementById(`preset-${matchedPreset.id}`);
+                if (presetRadio) {
+                    presetRadio.checked = true;
+                    currentFilters.presetCardIds = matchedPreset.cards;
+                    activePresetName = matchedPreset.name;
+                    clearPresetFilterButton.style.display = 'block';
+                    // Optionally remove from URL to prevent re-applying on refresh without explicit user action
+                    // window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
+                }
+            }
+        }
+    }
+
+    // Initial setup
+    renderPresetsForFiltering();
+    applyPresetFromUrl(); // Apply after presets are rendered
+    applyFiltersAndSort(); // Initial load of promos
+
 });
 </script>
 @endsection 

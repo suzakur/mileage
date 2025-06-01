@@ -400,8 +400,8 @@
                     <div class="chart-container">
                         <h5>Top 5 Merchant Pengeluaran</h5>
                         <div id="topMerchantChart" style="min-height: 350px;"></div>
-                    </div>
-                </div>
+            </div>
+        </div>
                 <div class="col-12 mb-4">
                     <div class="chart-container">
                         <h5>Analisis Timeline Pengeluaran (30 Hari Terakhir)</h5>
@@ -549,7 +549,7 @@
                     group.style.display = 'none';
                 }
             });
-
+            
             // Manage visibility of the main 'no transactions' message from Blade
             const bladeNoTransactionsMessage = document.querySelector('#timeline-content .no-transactions-message');
             const searchNoResultsMessage = timeline ? timeline.querySelector('.no-search-results') : null;
@@ -691,95 +691,95 @@
 
         // Monthly Spending Chart (Area Chart)
         if (monthlySpendingChartData && monthlySpendingChartData.data && monthlySpendingChartData.data.length > 0) {
-            var monthlySpendingOptions = {
-                series: [{
-                    name: 'Total Pengeluaran',
+        var monthlySpendingOptions = {
+            series: [{
+                name: 'Total Pengeluaran',
                     data: monthlySpendingChartData.data
-                }],
-                chart: {
-                    height: 380, // Adjusted height
-                    type: 'area',
-                    toolbar: { 
-                        show: true,
-                        tools: { download: true, selection: true, zoom: true, zoomin: true, zoomout: true, pan: true, reset: true }
-                    },
-                    zoom: { enabled: true }
-                },
-                colors: ['#50CD89'], // Metronic success color for spending area
-                dataLabels: {
-                    enabled: false
-                },
-                stroke: {
-                    curve: 'smooth',
-                    width: 3
-                },
-                fill: {
-                    type: 'gradient',
-                    gradient: {
-                        shadeIntensity: 1,
-                        opacityFrom: 0.7,
-                        opacityTo: 0.3,
-                        stops: [0, 90, 100]
-                    }
-                },
-                xaxis: {
+            }],
+            chart: {
+                height: 380, // Adjusted height
+                type: 'area',
+                toolbar: { 
+                    show: true,
+                    tools: { download: true, selection: true, zoom: true, zoomin: true, zoomout: true, pan: true, reset: true }
+                 },
+                zoom: { enabled: true }
+            },
+            colors: ['#50CD89'], // Metronic success color for spending area
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 3
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.7,
+                    opacityTo: 0.3,
+                    stops: [0, 90, 100]
+                }
+            },
+            xaxis: {
                     categories: monthlySpendingChartData.labels,
-                    labels: {
-                        style: { colors: textColor }
-                    },
-                    axisBorder: {
-                        show: false
-                    },
-                    axisTicks: {
-                        show: false
-                    }
+                labels: {
+                     style: { colors: textColor }
                 },
+                axisBorder: {
+                    show: false
+                },
+                axisTicks: {
+                    show: false
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Jumlah (Rp)',
+                    style: { color: textColor, fontWeight: 500 }
+                },
+                labels: {
+                    style: { colors: textColor },
+                    formatter: function (val) {
+                        if (val >= 1000000) {
+                           return "Rp " + (val / 1000000).toFixed(1).replace('.', ',') + " Jt";
+                        } else if (val >= 1000) {
+                            return "Rp " + (val / 1000).toFixed(1).replace('.', ',') + " Rb";
+                        }
+                        return "Rp " + val.toLocaleString('id-ID');
+                    }
+                }
+            },
+            grid: {
+                borderColor: borderColor,
+                strokeDashArray: 4,
                 yaxis: {
-                    title: {
-                        text: 'Jumlah (Rp)',
-                        style: { color: textColor, fontWeight: 500 }
-                    },
-                    labels: {
-                        style: { colors: textColor },
-                        formatter: function (val) {
-                            if (val >= 1000000) {
-                                return "Rp " + (val / 1000000).toFixed(1).replace('.', ',') + " Jt";
-                            } else if (val >= 1000) {
-                                return "Rp " + (val / 1000).toFixed(1).replace('.', ',') + " Rb";
-                            }
-                            return "Rp " + val.toLocaleString('id-ID');
-                        }
+                    lines: {
+                        show: true
+                    }
+                }
+            },
+            tooltip: {
+                x: {
+                    format: 'MMMM yyyy'
+                },
+                y: {
+                    formatter: function (val) {
+                        return "Rp " + val.toLocaleString('id-ID')
                     }
                 },
-                grid: {
-                    borderColor: borderColor,
-                    strokeDashArray: 4,
-                    yaxis: {
-                        lines: {
-                            show: true
-                        }
-                    }
-                },
-                tooltip: {
-                    x: {
-                        format: 'MMMM yyyy'
-                    },
-                    y: {
-                        formatter: function (val) {
-                            return "Rp " + val.toLocaleString('id-ID')
-                        }
-                    },
-                    theme: currentTheme
+                theme: currentTheme
                 }
             };
 
-            var monthlySpendingChartEl = document.querySelector("#monthlySpendingChart");
-            if(monthlySpendingChartEl && typeof ApexCharts !== 'undefined'){
-                var monthlySpendingChart = new ApexCharts(monthlySpendingChartEl, monthlySpendingOptions);
-                monthlySpendingChart.render();
-            } else {
-                if(monthlySpendingChartEl) monthlySpendingChartEl.innerHTML = '<p class="text-center text-muted">Gagal memuat chart bulanan.</p>';
-            }
+        var monthlySpendingChartEl = document.querySelector("#monthlySpendingChart");
+        if(monthlySpendingChartEl && typeof ApexCharts !== 'undefined'){
+            var monthlySpendingChart = new ApexCharts(monthlySpendingChartEl, monthlySpendingOptions);
+            monthlySpendingChart.render();
+        } else {
+             if(monthlySpendingChartEl) monthlySpendingChartEl.innerHTML = '<p class="text-center text-muted">Gagal memuat chart bulanan.</p>';
+        }
         } else {
             const monthlyFallbackContainer = document.querySelector("#monthlySpendingChart");
             if (monthlyFallbackContainer) {

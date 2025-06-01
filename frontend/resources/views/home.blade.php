@@ -4,13 +4,39 @@
 
 @section('styles')
 <style>
+    /* Full Page Scroll & Section Styling */
+    html, body {
+        scroll-behavior: smooth;
+        overflow: hidden; /* Prevent body scroll when scroll-container is used */
+    }
+    .scroll-container {
+        scroll-snap-type: y mandatory;
+        overflow-y: scroll;
+        height: 100vh;
+    }
+    .section-snap {
+        scroll-snap-align: start;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative; /* For animations */
+        opacity: 0; /* Initial state for animation */
+        transform: translateY(50px); /* Initial state for animation */
+        transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+    .section-snap.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
     /* Hero Section */
     .hero {
-        padding: 100px 0 60px;
         background: radial-gradient(ellipse at center, rgba(63, 76, 255, 0.08) 0%, transparent 70%);
-        min-height: 90vh;
         display: flex;
         align-items: center;
+        padding-top: 60px; /* To account for fixed navbar */
+        padding-bottom: 60px;
     }
     
     .hero-content {
@@ -44,7 +70,7 @@
     
     /* General Section Styling */
     .section {
-        padding: 70px 0;
+        width: 100%;
     }
     
     .section-header {
@@ -333,7 +359,7 @@
     .plan-card.featured::before {
         content: 'PALING POPULER';
         position: absolute;
-        top: 1rem;
+        top: -1rem;
         left: 50%;
         transform: translateX(-50%);
         background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
@@ -663,12 +689,98 @@
             padding: 1.25rem;
         }
     }
+
+    /* iPhone Mockup */
+    .iphone-mockup {
+        position: relative;
+        width: 320px; /* Increased width */
+        height: 660px; /* Increased height */
+        background-color: #1c1c1e; /* Darker iPhone body */
+        border-radius: 50px; /* More rounded corners */
+        box-shadow: 0 15px 40px rgba(0,0,0,0.35), inset 0 0 0 2px #333, inset 0 0 0 6px #111; /* Enhanced 3D effect */
+        margin: auto; /* Center the mockup */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 12px; /* Slightly more padding around screen */
+    }
+
+    .iphone-screen {
+        width: 100%;
+        height: 100%;
+        background-color: white;
+        border-radius: 40px; /* Consistent with outer radius */
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .dynamic-island {
+        position: absolute;
+        top: 18px; /* Adjusted position slightly higher */
+        left: 50%;
+        transform: translateX(-50%);
+        width: 125px; /* Adjusted width */
+        height: 32px; /* Adjusted height */
+        background-color: #000;
+        border-radius: 22px; /* More rounded */
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: space-between; /* For spacing camera and sensor */
+        padding: 0 10px; /* Padding for internal elements */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .dynamic-island::before, .dynamic-island::after {
+        content: '';
+        display: block;
+        background-color: #050505; /* Slightly lighter for depth */
+    }
+
+    .dynamic-island::before { /* Camera */
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        /* Removed left positioning, will be handled by flexbox */
+    }
+
+    .dynamic-island::after { /* Sensor bar */
+        width: 45px; /* Adjusted width */
+        height: 7px;
+        border-radius: 3.5px;
+        /* Removed left positioning, will be handled by flexbox */
+    }
+
+    .status-bar {
+        height: 50px; /* Adjusted height to accommodate island */
+    }
+
+    .pricing-card.popular .card-header {
+        background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+        color: white;
+    }
+    
+    .popular-badge {
+        position: absolute;
+        top: -15px; /* Adjust to prevent overlap */
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 0.4rem 1rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: bold;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
 </style>
 @endsection
 
 @section('content')
-    <!-- Hero Section -->
-    <section class="hero">
+<div class="scroll-container">
+    <section class="hero section-snap" id="hero-section">
         <div class="container">
             <div class="hero-content">
                 <div class="hero-text">
@@ -683,7 +795,6 @@
                     <div class="phone-mockup modern-iphone">
                         <div class="phone-frame">
                             <div class="phone-screen">
-                                <div class="iphone-notch"></div>
                                 <div class="iphone-island"></div>
                                 <div class="card-stack-slider">
                                     <div class="card-slide-item card-amex" style="transform: translate(-50%, -50%) scale(1) translateZ(0px) translateY(0px) rotateX(0deg);">
@@ -739,8 +850,7 @@
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section id="features" class="features section fade-in">
+    <section class="section features section-snap" id="features-section">
         <div class="container">
             <div class="section-header">
                 <h2>Mengapa Mileage App Pilihan Tepat?</h2>
@@ -796,8 +906,7 @@
         </div>
     </section>
 
-    <!-- Pricing Section -->
-    <section id="pricing" class="pricing section fade-in">
+     <section class="section pricing section-snap" id="pricing-section">
         <div class="container">
             <div class="section-header">
                 <h2>Pilih Paket yang Sesuai</h2>
@@ -885,8 +994,7 @@
         </div>
     </section>
 
-    <!-- Credit Cards Section -->
-    <section id="cards" class="credit-cards section fade-in">
+    <section class="section credit-cards section-snap" id="credit-cards-section">
         <div class="container">
             <div class="section-header">
                 <h2>Pilih Kartu Kredit Terbaik</h2>
@@ -923,7 +1031,7 @@
                             <li>Airport lounge access</li>
                             <li>Travel insurance</li>
                         </ul>
-                        <a href="#" class="btn btn-primary" style="width: 100%;">Cek Rate & Apply</a>
+                        <a href="#" class="btn btn-primary" style="width: 100%;">Ajukan</a>
                     </div>
                 </div>
                 
@@ -1099,8 +1207,7 @@
         </div>
     </section>
 
-    <!-- Promotions Section -->
-    <section class="promotions section fade-in">
+    <section class="section promotions section-snap" id="promotions-section">
         <div class="container">
             <div class="section-header">
                 <h2>Promo Kartu Kredit Terbaru</h2>
@@ -1161,8 +1268,7 @@
         </div>
     </section>
 
-    <!-- Blog Section -->
-    <section id="blog" class="blog section fade-in">
+    <section class="section blog section-snap" id="blog-section">
         <div class="container">
             <div class="section-header">
                 <h2>Tips & Insights Kartu Kredit</h2>
@@ -1266,6 +1372,11 @@
             </div>
         </div>
     </section>
+
+   
+
+
+</div>
 @endsection
 
 @section('scripts')
@@ -1465,6 +1576,54 @@
                 iconElement.className = 'bi ' + randomIconClass; // Replace existing icon class
             }
         });
+
+        heroSlider();
+        animateOnScroll(); 
+
+        // Full Page Scroll Animations
+        const sections = document.querySelectorAll('.section-snap');
+        const scrollContainer = document.querySelector('.scroll-container');
+
+        const observerOptions = {
+          root: null, // observes intersections with the viewport
+          rootMargin: '0px',
+          threshold: 0.5 // Trigger when 50% of the section is visible
+        };
+
+        const sectionObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+            } else {
+              // Optional: remove class if you want animation to re-trigger on scroll up
+              // entry.target.classList.remove('visible');
+            }
+          });
+        }, observerOptions);
+
+        sections.forEach(section => {
+          sectionObserver.observe(section);
+        });
+        
+        // Smooth scroll for internal links if any section is not 100vh
+        // (This is a fallback, ideally all .section-snap are 100vh)
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href.length > 1 && document.querySelector(href)) {
+                     e.preventDefault();
+                     const targetSection = document.querySelector(href);
+                     if (targetSection) {
+                        //scrollContainer.scrollTo({ // Use scrollContainer if it's the one scrolling
+                        window.scrollTo({ // Or window if body is scrolling
+                            top: targetSection.offsetTop - (document.querySelector('.navbar.fixed-top') ? document.querySelector('.navbar.fixed-top').offsetHeight : 0),
+                            behavior: 'smooth'
+                        });
+                     }
+                }
+            });
+        });
+
     });
 </script>
 @endsection 
