@@ -1,0 +1,431 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .text-xxs {
+    font-size: 0.625rem;
+    line-height: 0.75rem;
+  }
+  
+  /* Line clamp */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  /* Scrollbar hide */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+:root {
+  --background: 0 0% 0%;
+  --foreground: 0 0% 100%;
+  --muted: 0 0% 15%;
+  --muted-foreground: 0 0% 70%;
+  --popover: 0 0% 5%;
+  --popover-foreground: 0 0% 100%;
+  --card: 0 0% 3%;
+  --card-foreground: 0 0% 100%;
+  --border: 0 0% 15%;
+  --input: 0 0% 15%;
+  --primary: 0 0% 100%;
+  --primary-foreground: 0 0% 0%;
+  --secondary: 0 0% 10%;
+  --secondary-foreground: 0 0% 100%;
+  --accent: 215 100% 60%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 100% 50%;
+  --destructive-foreground: 0 0% 100%;
+  --ring: 215 100% 60%;
+  --radius: 1rem;
+  
+  /* Modern theme colors */
+  --modern-black: 0 0% 0%;
+  --modern-white: 0 0% 100%;
+  --modern-gray: 0 0% 15%;
+  --modern-highlight: 215 100% 60%;
+  --modern-gradient-start: 215 100% 60%;
+  --modern-gradient-end: 270 100% 60%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-snap-type: y mandatory;
+    overflow-y: scroll;
+    height: 100%;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-['Inter'] antialiased;
+    overflow-x: hidden;
+  }
+  
+  section {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    position: relative;
+    background-color: hsl(var(--background));
+    min-height: 100vh; /* Ensure each section takes at least full viewport height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .section-arrow {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    cursor: pointer;
+  }
+
+  .font-display {
+    font-family: 'Space Grotesk', sans-serif;
+  }
+
+  .font-body {
+    font-family: 'Inter', sans-serif;
+  }
+  
+  /* Dark Mode Toggle Classes */
+  .dark {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 70%;
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 100%;
+    --card: 0 0% 3%;
+    --card-foreground: 0 0% 100%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 100%;
+  }
+  
+  .light {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+    --muted: 0 0% 95%;
+    --muted-foreground: 0, 0%, 40%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+    --card: 0 0% 98%;
+    --card-foreground: 0 0% 0%;
+    --border: 0 0% 85%;
+    --input: 0 0% 90%;
+    --primary: 0 0% 0%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 0%;
+    --accent: 215 100% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Modern theme colors for light mode */
+    --modern-black: 0 0% 10%;
+    --modern-white: 0 0% 100%;
+    --modern-gray: 0 0% 90%;
+    --modern-highlight: 215 90% 50%;
+    --modern-gradient-start: 215 90% 50%;
+    --modern-gradient-end: 270 90% 55%;
+  }
+}
+
+@layer utilities {
+  /* Modern border */
+  .modern-border {
+    position: relative;
+    border-radius: var(--radius);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(to right bottom, #000000, #080808);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(8px);
+  }
+  
+  /* Glass morphism effect */
+  .glass {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Modern title bar */
+  .modern-title {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 12px 24px;
+    font-size: 14px;
+    text-align: center;
+    backdrop-filter: blur(4px);
+  }
+  
+  /* Grid background */
+  .dot-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(
+      rgba(255, 255, 255, 0.1) 1px,
+      transparent 1px
+    );
+    background-size: 20px 20px;
+    opacity: 0.2;
+    pointer-events: none;
+  }
+
+  /* Modern highlight effect */
+  .highlight-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      hsl(var(--accent)),
+      transparent
+    );
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  /* Animations */
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+  
+  @keyframes type {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+  
+  @keyframes scanline {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100vh); }
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  @keyframes cardRotate {
+    0% { transform: rotateX(0deg) rotateY(0deg); }
+    100% { transform: rotateX(10deg) rotateY(10deg); }
+  }
+
+  /* Animation utility classes */
+  .animate-blink {
+    animation: blink 1s step-end infinite;
+  }
+  
+  .animate-type {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    animation: type 2s steps(30);
+  }
+  
+  .animate-scanline {
+    animation: scanline 8s linear infinite;
+  }
+  
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  /* Modern credit card styling */
+  .modern-card {
+    background: rgba(10, 10, 10, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transform-style: preserve-3d;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    backface-visibility: hidden;
+    border-radius: 16px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+  
+  .modern-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 
+      0 15px 30px rgba(0, 0, 0, 0.2),
+      0 0 0 1px rgba(255, 255, 255, 0.15),
+      0 0 0 4px rgba(255, 255, 255, 0.05);
+  }
+  
+  .modern-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60%;
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.1),
+      transparent
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  
+  .modern-card:hover::before {
+    opacity: 1;
+  }
+  
+  /* 3D Card Stack */
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+  
+  /* Modern card chip */
+  .card-chip {
+    background: rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+  }
+
+  .card-chip::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.1),
+      rgba(255, 255, 255, 0)
+    );
+  }
+
+  /* Modern button */
+  .modern-btn {
+    position: relative;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    backdrop-filter: blur(4px);
+    font-weight: 500;
+  }
+  
+  .modern-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.7);
+  }
+  
+  .modern-btn:active {
+    transform: translateY(0);
+  }
+  
+  .modern-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    transition: transform 0.6s ease;
+  }
+  
+  .modern-btn:hover::after {
+    transform: translateX(200%);
+  }
+  
+  /* Primary button */
+  .primary-btn {
+    background: linear-gradient(
+      90deg, 
+      hsl(var(--modern-gradient-start)), 
+      hsl(var(--modern-gradient-end))
+    );
+    border: none;
+    color: white;
+    font-weight: 600;
+  }
+  
+  .primary-btn:hover {
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+  }
+  
+  /* Text caret */
+  .text-caret::after {
+    content: '';
+    display: inline-block;
+    width: 2px;
+    height: 1em;
+    background-color: white;
+    vertical-align: text-bottom;
+    margin-left: 1px;
+    animation: blink 1s step-end infinite;
+  }
+  
+  /* Card carousel animation */
+  .card-carousel {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding: 20px 0;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .card-carousel::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .card-carousel > div {
+    flex: 0 0 auto;
+  }
+}
